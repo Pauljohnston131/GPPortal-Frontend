@@ -1,0 +1,37 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+# 1. Checkout repo
+- checkout: self
+
+# 2. Archive the web/ folder
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: 'web'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/frontend.zip'
+    replaceExistingArchive: true
+  displayName: 'Archive frontend files'
+
+# 3. Publish the artifact
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/frontend.zip'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  displayName: 'Publish artifact'
+
+# 4. Deploy to Azure Web App
+- task: AzureWebApp@1
+  displayName: 'Deploy Frontend to gpportal-frontend'
+  inputs:
+    azureSubscription: 'gpportal-frontend-connection'
+    appName: 'gpportal-frontend'
+    package: '$(Build.ArtifactStagingDirectory)/frontend.zip'
+    appType: 'webApp'
