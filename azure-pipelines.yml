@@ -5,33 +5,24 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-
 # 1. Checkout repo
 - checkout: self
 
-# 2. Archive the web/ folder
+# 2. Zip JUST the contents of /web (not the folder itself)
 - task: ArchiveFiles@2
+  displayName: 'Create frontend deployment zip'
   inputs:
-    rootFolderOrFile: 'web'
-    includeRootFolder: true
-    archiveType: 'zip'
+    rootFolderOrFile: '$(Build.SourcesDirectory)/web'
+    includeRootFolder: false            # <— important
+    archiveType: zip
     archiveFile: '$(Build.ArtifactStagingDirectory)/frontend.zip'
     replaceExistingArchive: true
-  displayName: 'Archive frontend files'
 
-# 3. Publish the artifact
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/frontend.zip'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
-  displayName: 'Publish artifact'
-
-# 4. Deploy to Azure Web App
+# 3. Deploy to frontend App Service
 - task: AzureWebApp@1
-  displayName: 'Deploy Frontend to gpportal-frontend'
+  displayName: 'Deploy Frontend to Azure App Service'
   inputs:
-    azureSubscription: 'gpportal-frontend-connection'
-    appName: 'gpportal-frontend'
+    azureSubscription: 'gpportal-frontend-connection'   # your service connection name
+    appName: 'gpportal-frontend'                        # EXACTLY as in Azure
     package: '$(Build.ArtifactStagingDirectory)/frontend.zip'
-    appType: 'webApp'
+    appType: 'webAppLinux'
