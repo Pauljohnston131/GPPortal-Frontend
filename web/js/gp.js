@@ -14,33 +14,26 @@ const detailNotes = document.getElementById("detailNotes");
 const saveDetail = document.getElementById("saveDetail");
 const deleteDetail = document.getElementById("deleteDetail");
 const detailMsg = document.getElementById("detailMsg");
-
 let currentRecords = [];
 let selectedRecord = null;
-
 gpLoadBtn.addEventListener("click", loadGpRecords);
 applyFilter.addEventListener("click", applyFilterStatus);
-
 // -------------------------------
 // Load patient records
 // -------------------------------
 async function loadGpRecords() {
     const pid = gpInput.value.trim();
     if (!pid) return;
-
     const data = await apiGet(`/records?patientId=${pid}`);
     gpRecordsList.innerHTML = "";
     detailContent.style.display = "none";
-
     if (!data || data.error) {
         gpRecordsList.innerHTML = `<p class="text-danger">Failed to load records.</p>`;
         return;
     }
-
     currentRecords = data.records;
     renderRecordList(currentRecords);
 }
-
 // -------------------------------
 // Render list with thumbnails
 // -------------------------------
@@ -50,11 +43,9 @@ function renderRecordList(records) {
         gpRecordsList.innerHTML = "<p>No records found.</p>";
         return;
     }
-
     records.forEach(rec => {
         // CORRECT: use 'path' variable, not 'publicPath'
         const path = rec.blobName || rec.blobUrl.split('patient-uploads/').pop();
-
         const thumb = `
             <div class="media-thumb-small">
                 <img src="${API_BASE}/media/${path}"
@@ -63,14 +54,12 @@ function renderRecordList(records) {
                      alt="thumbnail">
             </div>
         `;
-
         const badgeClass = {
             pending: "status-pending",
             under_review: "status-under_review",
             reviewed: "status-reviewed",
             action_required: "status-action_required"
         }[rec.status] || "status-pending";
-
         const row = document.createElement("div");
         row.className = "record-row";
         row.id = `row-${rec.id}`;
@@ -88,7 +77,6 @@ function renderRecordList(records) {
         gpRecordsList.appendChild(row);
     });
 }
-
 // -------------------------------
 // Select record → show detail panel
 // -------------------------------
@@ -96,15 +84,39 @@ function selectRecord(rec) {
     selectedRecord = rec;
     document.querySelectorAll(".record-row").forEach(r => r.classList.remove("selected-row"));
     document.getElementById(`row-${rec.id}`).classList.add("selected-row");
-
     detailContent.style.display = "block";
     detailFile.textContent = rec.originalName;
     detailDate.textContent = new Date(rec.createdAt * 1000).toLocaleString();
     detailStatus.value = rec.status;
     detailNotes.value = rec.gpNotes || "";
     detailMsg.textContent = "";
-}
 
+    const path = rec.blobName || rec.blobUrl.split('patient-uploads/').pop();
+    const previewDiv = document.getElementById('detailPreview');
+    previewDiv.innerHTML = '';
+    let previewElement;
+    if (rec.contentType.startsWith('image/')) {
+        previewElement = document.createElement('img');
+        previewElement.src = `${API_BASE}/media/${path}`;
+        previewElement.alt = 'Patient upload';
+        previewElement.className = 'img-fluid';
+        document.getElementById('annotationTools').style.display = 'block';
+    } else if (rec.contentType.startsWith('video/')) {
+        previewElement = document.createElement('video');
+        previewElement.src = `${API_BASE}/media/${path}`;
+        previewElement.controls = true;
+        previewElement.className = 'img-fluid';
+        document.getElementById('annotationTools').style.display = 'none';
+    } else {
+        previewElement = document.createElement('a');
+        previewElement.href = `${API_BASE}/media/${path}`;
+        previewElement.target = '_blank';
+        previewElement.className = 'btn btn-nhs-primary';
+        previewElement.textContent = 'View/Download File';
+        document.getElementById('annotationTools').style.display = 'none';
+    }
+    previewDiv.appendChild(previewElement);
+}
 // -------------------------------
 // Save / Delete
 // -------------------------------
@@ -119,7 +131,6 @@ saveDetail.addEventListener("click", async () => {
     setTimeout(() => detailMsg.textContent = "", 2000);
     loadGpRecords();
 });
-
 deleteDetail.addEventListener("click", async () => {
     if (!selectedRecord || !confirm("Permanently delete this record?")) return;
     const res = await apiDelete(`/record/${selectedRecord.id}`);
@@ -128,7 +139,6 @@ deleteDetail.addEventListener("click", async () => {
         loadGpRecords();
     }
 });
-
 // -------------------------------
 // Filter
 // -------------------------------
