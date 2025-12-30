@@ -503,6 +503,7 @@
             <div class="patient-icon">
                 <i class="bi bi-person-fill"></i>
             </div>
+            <button id="logoutBtn" class="btn btn-sm btn-outline-light ms-2">Logout</button>
         </div>
     </div>
 </nav>
@@ -535,7 +536,7 @@
                 <span class="badge bg-purple text-white">Secure Upload</span>
             </div>
             
-            <p class="info-text mb-4">Upload images, documents, or PDFs related to your symptoms or condition for your GP to review.</p>
+            <p class="info-text mb-4">Upload images, documents, PDFs, or videos related to your symptoms or condition for your GP to review.</p>
 
             <form id="uploadForm" class="mt-4">
                 <div class="mb-4">
@@ -547,13 +548,13 @@
                 <div class="mb-4">
                     <label class="form-label">Select File to Upload</label>
                     <div class="upload-area" id="uploadArea">
-                        <input type="file" id="fileInput" class="d-none" accept="image/*,application/pdf" required>
+                        <input type="file" id="fileInput" class="d-none" accept="image/*,application/pdf,video/*" required>
                         <div class="upload-icon">
                             <i class="bi bi-cloud-arrow-up-fill"></i>
                         </div>
                         <h5>Upload your file</h5>
                         <p class="info-text">Click to browse or drag and drop a file here</p>
-                        <p class="info-text">Supported formats: JPG, PNG, PDF (Max 10MB)</p>
+                        <p class="info-text">Supported formats: JPG, PNG, PDF, MP4 (Max 25MB)</p>
                         <div id="selectedFileName" class="mt-3 fw-bold text-primary" style="display: none;"></div>
                     </div>
                 </div>
@@ -578,7 +579,7 @@
                 <span class="badge bg-secondary" id="recordCount">0 records</span>
             </div>
             
-            <div id="recordsList" class="mt-3">
+            <div id="recordsList" class="mt-3 row g-3">
                 <div class="empty-state">
                     <div class="empty-state-icon">
                         <i class="bi bi-file-earmark-medical"></i>
@@ -586,6 +587,42 @@
                     <h5>No records found</h5>
                     <p class="info-text">Enter your Patient ID and upload files to see them here</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- New: Secure Messaging Panel -->
+        <div class="panel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="panel-title mb-0">Secure Messages</h3>
+                <span class="badge bg-info text-white">New Feature</span>
+            </div>
+            <p class="info-text mb-4">Send a secure message to your GP. Responses will appear here.</p>
+            <form id="messageForm" class="mt-4">
+                <div class="mb-3">
+                    <label class="form-label">Subject</label>
+                    <input type="text" id="messageSubject" class="form-control" placeholder="e.g., Question about my upload" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Message</label>
+                    <textarea id="messageBody" class="form-control" rows="4" placeholder="Type your message here..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-nhs-primary w-100">Send Message</button>
+            </form>
+            <div id="messageList" class="mt-4">
+                <!-- Messages will be loaded here -->
+            </div>
+            <div id="messageMsg" class="mt-3 text-center"></div>
+        </div>
+
+        <!-- New: Appointments Panel -->
+        <div class="panel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="panel-title mb-0">Upcoming Appointments</h3>
+                <span class="badge bg-success text-white">New Feature</span>
+            </div>
+            <p class="info-text mb-4">View your scheduled appointments. Contact your GP to book new ones.</p>
+            <div id="appointmentsList" class="mt-3">
+                <!-- Appointments will be loaded here -->
             </div>
         </div>
     </div>
@@ -611,6 +648,7 @@
         const fileInput = document.getElementById('fileInput');
         const selectedFileName = document.getElementById('selectedFileName');
         const refreshBtn = document.getElementById('refreshBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
         
         // Update patient ID display
         patientIdInput.addEventListener('input', function() {
@@ -672,50 +710,50 @@
         
         function resetUploadArea() {
             uploadArea.innerHTML = `
-                <input type="file" id="fileInput" class="d-none" accept="image/*,application/pdf" required>
+                <input type="file" id="fileInput" class="d-none" accept="image/*,application/pdf,video/*" required>
                 <div class="upload-icon">
                     <i class="bi bi-cloud-arrow-up-fill"></i>
                 </div>
                 <h5>Upload your file</h5>
                 <p class="info-text">Click to browse or drag and drop a file here</p>
-                <p class="info-text">Supported formats: JPG, PNG, PDF (Max 10MB)</p>
+                <p class="info-text">Supported formats: JPG, PNG, PDF, MP4 (Max 25MB)</p>
                 <div id="selectedFileName" class="mt-3 fw-bold text-primary" style="display: none;"></div>
             `;
-            // Reattach the selectedFileName element reference
-            selectedFileName.display = 'none';
         }
         
         // Refresh button functionality
         refreshBtn.addEventListener('click', function() {
             const pid = patientIdInput.value.trim();
             if (pid) {
-                // Simulate refresh action
                 refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Refreshing...';
+                loadRecords();
+                loadMessages();
+                loadAppointments();
                 setTimeout(() => {
                     refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Refresh';
-                    // In a real implementation, this would reload records
-                    alert('Records refreshed!');
                 }, 1000);
             } else {
                 alert('Please enter a Patient ID first');
             }
         });
         
-        // Form submission styling
-        const uploadForm = document.getElementById('uploadForm');
-        uploadForm.addEventListener('submit', function(e) {
-            // Add visual feedback
-            const submitBtn = uploadForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Uploading...';
-            submitBtn.disabled = true;
-            
-            // Reset after 3 seconds (in real app, this would be after actual upload)
-            setTimeout(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 3000);
+        // Logout button
+        logoutBtn.addEventListener('click', function() {
+            localStorage.removeItem('patientId');
+            patientIdInput.value = '';
+            patientIdInput.dispatchEvent(new Event('input'));
+            alert('Logged out successfully');
         });
+
+        // Auto-fill patient ID from localStorage if available
+        const storedId = localStorage.getItem('patientId');
+        if (storedId) {
+            patientIdInput.value = storedId;
+            patientIdInput.dispatchEvent(new Event('input'));
+            loadRecords();
+            loadMessages();
+            loadAppointments();
+        }
     });
 </script>
 
