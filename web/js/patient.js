@@ -84,33 +84,55 @@ async function loadRecords() {
         return;
     }
 
-    recordsList.innerHTML = "<div class='text-center'><div class='spinner-border'></div></div>";
+    recordsList.innerHTML = "<div class='text-center py-5'><div class='spinner-border text-primary'></div><p>Loading records...</p></div>";
 
     try {
         const res = await fetch(RETRIEVE_ENDPOINT);
+        
+        if (!res.ok) {
+            throw new Error(`Server returned ${res.status}: ${res.statusText}`);
+        }
+
+        const contentType = res.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            const text = await res.text();
+            console.error("Expected JSON, got:", text.substring(0, 500));
+            throw new Error("Invalid response: not JSON (likely 404 or server error)");
+        }
+
         let data = await res.json();
         if (!Array.isArray(data)) data = [];
 
-        const filtered = data.filter(rec => (rec.userID || rec.UserID || "") === pid);
+        const filtered = data.filter(rec => 
+            String(rec.userID || rec.UserID || "").trim() === pid
+        );
 
-        recordCount.textContent = `${filtered.length} records`;
+        recordCount.textContent = `${filtered.length} record${filtered.length === 1 ? '' : 's'}`;
 
         if (filtered.length === 0) {
-            recordsList.innerHTML = "<div class='empty-state'><h5>No uploads yet</h5></div>";
+            recordsList.innerHTML = `
+                <div class='empty-state'>
+                    <div class='empty-state-icon'><i class='bi bi-inbox'></i></div>
+                    <h5>No uploads yet for ${pid}</h5>
+                    <p class='info-text'>Your uploaded evidence will appear here once submitted.</p>
+                </div>`;
             return;
         }
 
         recordsList.innerHTML = "";
         filtered.forEach(rec => {
-            const fileName = rec.fileName || rec.FileName || "Unknown";
-            const path = rec.filePath || rec.FilePath || "";
-            const fullUrl = path.startsWith('http') ? path : `${BLOB_ACCOUNT}/${path.replace(/^\/+/, '')}`;
-            const contentType = rec.contentType || rec.ContentType || "";
-            const isImage = contentType.startsWith("image/");
-            const isVideo = contentType.startsWith("video/") || /\.(mp4|webm|mov)$/i.test(fileName);
-            const preview = isImage ? `<img src="${fullUrl}" class="preview-img" onerror="this.src='img/file-icon.png'" alt="preview">` :
-                            isVideo ? `<video src="${fullUrl}" class="preview-img" controls muted onerror="this.src='img/file-icon.png'"></video>` :
-                            `<img src="img/file-icon.png" class="preview-img" alt="file">`;
+            let fileName = rec.fileName || rec.FileName || "Unnamed file";
+            let path = rec.filePath || rec.FilePath || "";
+            let fullUrl = path.startsWith('http') ? path : `${BLOB_ACCOUNT}/${path.replace(/^\/+/, '')}`;
+            let contentType = rec.contentType || rec.ContentType || "";
+            let isImage = contentType.startsWith("image/");
+            let isVideo = contentType.startsWith("video/") || /\.(mp4|webm|mov|avi)$/i.test(fileName);
+
+            let preview = isImage 
+                ? `<img src="${fullUrl}" class="preview-img" onerror="this.src='img/file-icon.png'; this.alt='Broken image'" alt="${fileName}">`
+                : isVideo
+                ? `<div class="preview-img bg-dark d-flex align-items-center justify-content-center text-white"><i class="bi bi-play-fill fs-4"></i></div>`
+                : `<img src="img/file-icon.png" class="preview-img" alt="Document">`;
 
             const card = document.createElement("div");
             card.className = "col-12 col-md-6 col-lg-4";
@@ -119,34 +141,27 @@ async function loadRecords() {
                     ${preview}
                     <div class="ms-3 flex-grow-1">
                         <div><strong>${fileName}</strong></div>
-                        <div class="small text-muted">Uploaded: ${new Date().toLocaleString()}</div> <!-- Assume no timestamp, use current -->
-                        <div><span class="status-badge status-pending">Pending</span></div> <!-- Mock status -->
-                        <a href="${fullUrl}" target="_blank" class="btn btn-sm btn-outline-primary mt-2">Open</a>
-                        <button class="btn btn-sm btn-outline-danger mt-2 ms-2 delete-btn" data-path="${path}">Delete</button>
+                        <div class="small text-muted">Uploaded by: Patient ${pid}</div>
+                        <a href="${fullUrl}" target="_blank" class="btn btn-sm btn-outline-primary mt-2">
+                            ${isVideo ? 'Play Video' : 'Open Full'}
+                        </a>
                     </div>
                 </div>
             `;
             recordsList.appendChild(card);
         });
 
-        // Add delete listeners
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', async () => {
-                const path = btn.dataset.path;
-                // Assume delete endpoint; replace with actual if available
-                const res = await apiDelete(`/delete?path=${encodeURIComponent(path)}&patientId=${pid}`);
-                if (res.success) {
-                    loadRecords();
-                } else {
-                    alert('Delete failed');
-                }
-            });
-        });
-
     } catch (err) {
-        recordsList.innerHTML = "<div class='text-danger'>Error loading records</div>";
+        console.error("Load records failed:", err);
+        recordsList.innerHTML = `
+            <div class="alert alert-warning">
+                <strong>Unable to load records</strong><br>
+                <small>The server is currently unavailable or returned an error.<br>
+                Check your Logic App status in Azure Portal.</small>
+            </div>`;
+        recordCount.textContent = "? records";
     }
-};
+}
 
 // New: Secure Messaging
 messageForm.addEventListener('submit', async e => {
