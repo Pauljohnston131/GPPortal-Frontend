@@ -81,7 +81,7 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            pointer-events: none; /* Prevent blocking clicks */
+            pointer-events: none;
         }
        
         .dashboard-title {
@@ -134,11 +134,12 @@
             min-height: 100vh;
             width: 100%;
             box-sizing: border-box;
-            padding-top: 120px; /* Adjusted for fixed navbar */
+            padding-top: 120px;
             padding-left: 1.5rem;
             padding-right: 1.5rem;
             padding-bottom: 3rem;
         }
+        
         /* Dashboard Header */
         .dashboard-header {
             margin-bottom: 2.5rem;
@@ -150,6 +151,7 @@
             flex-wrap: wrap;
             gap: 1.5rem;
         }
+        
         .page-title {
             color: #2D3765;
             font-weight: 800;
@@ -158,6 +160,7 @@
             display: inline-block;
             margin-bottom: 0.5rem;
         }
+        
         .page-title::after {
             content: '';
             position: absolute;
@@ -168,11 +171,13 @@
             background: linear-gradient(90deg, #72CFD4, #2D3765);
             border-radius: 2px;
         }
+        
         .greeting-text {
             color: #5e6d8a;
             font-size: 1rem;
             font-weight: 500;
         }
+        
         /* Buttons */
         .nav-action-btn {
             background: linear-gradient(135deg, #2D3765, #3b4a68);
@@ -189,12 +194,14 @@
             transition: all 0.3s;
             white-space: nowrap;
         }
+        
         .nav-action-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(45, 55, 101, 0.25);
             background: linear-gradient(135deg, #23315a, #324167);
             color: white;
         }
+        
         .review-btn {
             background: linear-gradient(135deg, #72CFD4, #5bc0c5);
             border: none;
@@ -207,17 +214,20 @@
             align-items: center;
             gap: 0.5rem;
         }
+        
         .review-btn:hover:not(:disabled) {
             background: linear-gradient(135deg, #5bc0c5, #4ab0b5);
             transform: translateY(-3px);
             box-shadow: 0 10px 26px rgba(114, 207, 212, 0.45);
         }
+        
         .quick-actions {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             flex-wrap: wrap;
         }
+        
         /* Glass Card Effect */
         .glass-card {
             background: rgba(255, 255, 255, 0.75);
@@ -228,9 +238,11 @@
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
         }
+        
         .glass-card:hover {
             box-shadow: 0 16px 50px rgba(0, 0, 0, 0.12);
         }
+        
         /* Panel Styles */
         .panel {
             background: rgba(255, 255, 255, 0.75);
@@ -242,9 +254,11 @@
             padding: 1.5rem;
             transition: all 0.3s ease;
         }
+        
         .panel:hover {
             box-shadow: 0 16px 50px rgba(0, 0, 0, 0.12);
         }
+        
         .panel-title {
             color: var(--nhs-dark-blue);
             font-weight: 700;
@@ -253,6 +267,7 @@
             border-bottom: 2px solid rgba(114, 207, 212, 0.5);
             font-size: 1.25rem;
         }
+        
         /* Record Rows */
         .record-row {
             padding: 1rem 1.25rem;
@@ -262,15 +277,18 @@
             border-radius: 10px;
             margin-bottom: 0.5rem;
         }
+        
         .record-row:hover {
             background: rgba(114, 207, 212, 0.08);
             transform: translateX(4px);
         }
+        
         .selected-row {
             background: linear-gradient(135deg, rgba(114, 207, 212, 0.15), rgba(45, 55, 101, 0.1)) !important;
             border-left: 4px solid var(--nhs-aqua);
             box-shadow: 0 4px 12px rgba(114, 207, 212, 0.15);
         }
+        
         /* Status Badges */
         .status-badge {
             padding: 0.5rem 1rem;
@@ -281,18 +299,23 @@
             text-transform: capitalize;
             letter-spacing: 0.3px;
         }
+        
         .status-pending {
             background: linear-gradient(135deg, #d9534f, #c9302c);
         }
+        
         .status-under_review {
             background: linear-gradient(135deg, #f0ad4e, #ec971f);
         }
+        
         .status-reviewed {
             background: linear-gradient(135deg, #5cb85c, #449d44);
         }
+        
         .status-action_required {
             background: linear-gradient(135deg, #0275d8, #025aa5);
         }
+        
         /* Form Elements */
         .form-control, .form-select {
             border-radius: 12px;
@@ -302,11 +325,13 @@
             transition: all 0.3s;
             background: rgba(255, 255, 255, 0.9);
         }
+        
         .form-control:focus, .form-select:focus {
             border-color: var(--nhs-aqua);
             box-shadow: 0 0 0 0.25rem rgba(114, 207, 212, 0.25);
             background: white;
         }
+        
         .btn-nhs-primary {
             background: linear-gradient(135deg, #2D3765, #3b4a68);
             border: none;
@@ -316,12 +341,14 @@
             border-radius: 12px;
             transition: all 0.3s;
         }
+        
         .btn-nhs-primary:hover {
             background: linear-gradient(135deg, #23315a, #324167);
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(45, 55, 101, 0.25);
             color: white;
         }
+        
         .btn-nhs-secondary {
             background: rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(45, 55, 101, 0.2);
@@ -331,6 +358,7 @@
             border-radius: 12px;
             transition: all 0.3s;
         }
+        
         .btn-nhs-secondary:hover {
             background: white;
             border-color: var(--nhs-dark-blue);
@@ -338,6 +366,7 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
+        
         /* Patient Summary */
         .patient-summary {
             background: linear-gradient(135deg, rgba(114, 207, 212, 0.1), rgba(45, 55, 101, 0.05));
@@ -346,28 +375,33 @@
             margin-bottom: 1.5rem;
             border: 1px solid rgba(114, 207, 212, 0.3);
         }
+        
         .patient-id-display {
             font-weight: 700;
             color: var(--nhs-dark-blue);
             font-size: 1.25rem;
             margin-bottom: 0.5rem;
         }
+        
         .record-count {
             font-size: 0.875rem;
             color: var(--nhs-grey);
             font-weight: 500;
         }
+        
         /* Detail Sections */
         .detail-section {
             margin-bottom: 1.5rem;
             padding-bottom: 1.5rem;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
+        
         .detail-section:last-child {
             border-bottom: none;
             margin-bottom: 0;
             padding-bottom: 0;
         }
+        
         .detail-label {
             font-weight: 600;
             color: var(--nhs-grey);
@@ -376,31 +410,37 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+        
         .detail-value {
             color: var(--nhs-black);
             font-size: 1.05rem;
             font-weight: 500;
         }
+        
         /* Empty State */
         .empty-state {
             text-align: center;
             padding: 3rem 2rem;
             color: var(--nhs-grey);
         }
+        
         .empty-state-icon {
             font-size: 3.5rem;
             color: rgba(114, 207, 212, 0.3);
             margin-bottom: 1.5rem;
         }
+        
         .empty-state h5 {
             color: var(--nhs-dark-blue);
             font-weight: 600;
             margin-bottom: 0.75rem;
         }
+        
         .empty-state p {
             color: var(--nhs-grey);
             font-size: 0.95rem;
         }
+        
         /* Section Headers */
         .section-header {
             display: flex;
@@ -408,20 +448,24 @@
             align-items: center;
             margin-bottom: 1.25rem;
         }
+        
         .section-header h5 {
             color: var(--nhs-dark-blue);
             font-weight: 700;
             margin: 0;
         }
+        
         /* Badge Styles */
         .badge {
             font-weight: 600;
             padding: 0.35rem 0.75rem;
             border-radius: 10px;
         }
+        
         .bg-purple {
             background: linear-gradient(135deg, #6c63ff, #5a52d5) !important;
         }
+        
         /* Thumbnail Images */
         .thumb-img {
             width: 60px;
@@ -431,9 +475,11 @@
             border: 2px solid white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+        
         .media-thumb-small {
             position: relative;
         }
+        
         /* Layout */
         .main-grid-3 {
             display: grid;
@@ -441,6 +487,7 @@
             gap: 2rem;
             margin-bottom: 2rem;
         }
+        
         /* Preview Container */
         .preview-container {
             background: rgba(255, 255, 255, 0.9);
@@ -452,6 +499,7 @@
             align-items: center;
             justify-content: center;
         }
+        
         .preview-container img,
         .preview-container video {
             max-width: 100%;
@@ -459,18 +507,28 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+        
         .preview-container canvas {
             max-width: 100%;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             cursor: crosshair;
         }
+        
+        /* Alert Styles */
+        .alert {
+            border-radius: 12px;
+            border: none;
+            margin-bottom: 1rem;
+        }
+        
         /* Responsive Design */
         @media (max-width: 1200px) {
             .main-grid-3 {
                 grid-template-columns: 1fr 1fr;
             }
         }
+        
         @media (max-width: 992px) {
             .dashboard-header {
                 flex-direction: column;
@@ -487,24 +545,30 @@
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
             }
+            
             .dashboard-title-area {
-                display: none; /* Hide centered title on medium/small screens */
+                display: none;
             }
+            
             .navbar-brand {
                 font-size: 1.1rem;
             }
+            
             .gp-badge {
                 padding: 0.4rem 0.8rem;
                 font-size: 0.85rem;
             }
+            
             .user-info {
                 font-size: 0.85rem;
             }
+            
             .user-icon {
                 width: 36px;
                 height: 36px;
             }
         }
+        
         @media (max-width: 768px) {
             body {
                 padding: 5rem 1rem 2rem;
@@ -558,13 +622,15 @@
        
         @media (max-width: 576px) {
             .brand-text {
-                display: none; /* Hide "Clinical Portal" text on very small screens */
+                display: none;
             }
+            
             .gp-badge {
                 padding: 0.5rem 0.9rem;
             }
+            
             .user-details {
-                display: none; /* Hide doctor name/title, keep only icon */
+                display: none;
             }
         }
     </style>
@@ -579,16 +645,22 @@
             <span class="brand-text">Clinical Portal</span>
         </a>
        
+        <!-- Centered: Dashboard Title -->
+        <div class="dashboard-title-area">
+            <h3 class="dashboard-title">Patient Record Review</h3>
+        </div>
+       
         <!-- Right: User Info -->
         <div class="user-info">
-            <div class="user-icon">GP</div>
             <div class="user-details">
                 <div class="fw-semibold">Dr. Smith</div>
                 <div class="small opacity-75">General Practitioner</div>
             </div>
+            <div class="user-icon">GP</div>
         </div>
     </div>
 </nav>
+
 <!-- Main Content -->
 <main class="container-fluid">
     <!-- Dashboard Header -->
@@ -604,12 +676,13 @@
                 Review Requests
                 <span class="badge bg-danger ms-2" id="pendingCount">0</span>
             </button>
-            <button class="review-btn">
+            <button class="review-btn" id="completeReviewBtn">
                 <i class="bi bi-check-circle me-2"></i>
                 Complete Review
             </button>
         </div>
     </div>
+    
     <!-- Main Content Grid -->
     <div class="main-grid-3">
         <!-- Left Panel - Patient Search -->
@@ -632,7 +705,9 @@
                     <div class="record-count" id="summaryLastUpload"></div>
                 </div>
             </div>
+            
             <hr class="my-4">
+            
             <div>
                 <h6 class="detail-label mb-3">Filter Records</h6>
                 <select id="filterStatus" class="form-select mb-3">
@@ -650,6 +725,7 @@
                 </button>
             </div>
         </div>
+        
         <!-- Middle Panel - Patient Records -->
         <div class="panel">
             <div class="section-header">
@@ -667,6 +743,7 @@
                 </div>
             </div>
         </div>
+        
         <!-- Right Panel - Record Details -->
         <div class="panel" id="detailPanel">
             <div class="section-header">
@@ -675,6 +752,7 @@
             </div>
            
             <p class="info-text mb-4">Select a record to view details and update status</p>
+            
             <div id="detailContent" style="display:none;">
                 <div class="detail-section">
                     <div class="detail-label">File Name</div>
@@ -706,6 +784,7 @@
                         <span id="detailStatusBadge" class="status-badge"></span>
                     </div>
                 </div>
+                
                 <div class="detail-section">
                     <label class="detail-label">Update Status</label>
                     <select id="detailStatus" class="form-select mb-3">
@@ -715,10 +794,12 @@
                         <option value="action_required">Action Required</option>
                     </select>
                 </div>
+                
                 <div class="detail-section">
                     <label class="detail-label">Clinical Comments / Triage Notes</label>
                     <textarea class="form-control mb-3" id="detailNotes" rows="5" placeholder="Add clinical comments, triage notes, or feedback for the patient..."></textarea>
                 </div>
+                
                 <div class="d-flex gap-2">
                     <button id="saveDetail" class="btn btn-nhs-primary flex-grow-1">
                         <i class="bi bi-check-circle me-2"></i>Save Changes
@@ -727,11 +808,13 @@
                         <i class="bi bi-trash me-2"></i>Delete
                     </button>
                 </div>
-                <div id="detailMsg" class="mt-3 text-center small"></div>
+                
+                <div id="detailMsg" class="mt-3"></div>
             </div>
         </div>
     </div>
 </main>
+
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/api.js"></script>
 <script>
@@ -742,8 +825,9 @@
         month: 'long',
         day: 'numeric'
     });
+    
     // -------------------------------
-    // GP DASHBOARD – WITH IMAGE PREVIEW
+    // GP DASHBOARD – WITH FULL CRUD
     // -------------------------------
     const gpInput = document.getElementById("gpPatientId");
     const gpLoadBtn = document.getElementById("gpLoadBtn");
@@ -758,82 +842,94 @@
     const saveDetail = document.getElementById("saveDetail");
     const deleteDetail = document.getElementById("deleteDetail");
     const detailMsg = document.getElementById("detailMsg");
-    let currentRecords = [];
+    const detailPreview = document.getElementById("detailPreview");
+    const detailStatusBadge = document.getElementById("detailStatusBadge");
+    const completeReviewBtn = document.getElementById("completeReviewBtn");
+    
+    let allRecords = [];
+    let filteredRecords = [];
     let selectedRecord = null;
+    
+    // Event Listeners
     gpLoadBtn.addEventListener("click", loadGpRecords);
     applyFilter.addEventListener("click", applyFilterStatus);
-    // Clear filter button functionality
+    
+    // Clear filter button
     document.getElementById('clearFilter').addEventListener('click', function() {
         filterStatus.value = '';
-        if (currentRecords && currentRecords.length > 0) {
-            renderRecordList(currentRecords);
-            updateBadgeCount();
-        }
+        filteredRecords = [...allRecords];
+        renderRecordList(filteredRecords);
+        updateBadgeCount();
     });
+    
     // Review requests button
     document.getElementById('reviewRequestsBtn').addEventListener('click', function() {
         filterStatus.value = 'pending';
         applyFilterStatus();
     });
+    
+    // Complete review button
+    completeReviewBtn.addEventListener('click', function() {
+        if (selectedRecord) {
+            detailStatus.value = 'reviewed';
+            saveDetail.click();
+        } else {
+            showDetailMessage('Please select a record first', 'warning');
+        }
+    });
+    
+    // Enter key support for patient ID
+    gpInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            loadGpRecords();
+        }
+    });
+    
     // -------------------------------
     // Load patient records
     // -------------------------------
     async function loadGpRecords() {
         const pid = gpInput.value.trim();
-        if (!pid) return;
-        const data = await apiGet(`/records?patientId=${pid}`);
-        gpRecordsList.innerHTML = "";
-        detailContent.style.display = "none";
-        if (!data || data.error) {
-            gpRecordsList.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">
-                        <i class="bi bi-exclamation-triangle"></i>
-                    </div>
-                    <h5>Unable to load records</h5>
-                    <p class="info-text">Please check the Patient ID and try again</p>
-                </div>`;
-           
-            document.getElementById('searchBadge').className = 'badge bg-danger';
-            document.getElementById('searchBadge').textContent = 'Error';
-           
-            // Hide patient summary
-            document.getElementById('patientSummary').style.display = 'none';
+        if (!pid) {
+            showAlert('Please enter a Patient ID', 'warning');
             return;
         }
-        currentRecords = data.records;
-        renderRecordList(currentRecords);
-       
-        // Update UI elements
-        document.getElementById('gpRecordCount').textContent = `${currentRecords.length} record${currentRecords.length !== 1 ? 's' : ''}`;
-        document.getElementById('searchBadge').className = 'badge bg-success';
-        document.getElementById('searchBadge').textContent = 'Loaded';
-       
-        // Show patient summary
-        const patientSummary = document.getElementById('patientSummary');
-        if (currentRecords.length > 0) {
-            patientSummary.style.display = 'block';
-            document.getElementById('summaryPatientId').textContent = `Patient: ${pid}`;
-            document.getElementById('summaryRecordCount').textContent = `${currentRecords.length} record(s)`;
-           
-            // Find most recent upload
-            const latest = currentRecords.reduce((latest, record) => {
-                return record.createdAt > latest.createdAt ? record : latest;
-            }, currentRecords[0]);
-           
-            const latestDate = new Date(latest.createdAt * 1000).toLocaleDateString();
-            document.getElementById('summaryLastUpload').textContent = `Last upload: ${latestDate}`;
-        } else {
-            patientSummary.style.display = 'none';
+        
+        try {
+            showAlert('Loading records...', 'info');
+            const data = await apiGet(`/records?patientId=${pid}`);
+            
+            if (data.error) {
+                showAlert(data.error, 'danger');
+                resetUI();
+                return;
+            }
+            
+            allRecords = data.records || [];
+            filteredRecords = [...allRecords];
+            
+            if (allRecords.length === 0) {
+                showAlert(`No records found for patient ${pid}`, 'info');
+            } else {
+                showAlert(`Loaded ${allRecords.length} records for patient ${pid}`, 'success');
+            }
+            
+            renderRecordList(filteredRecords);
+            updateUIAfterLoad(pid);
+            
+        } catch (error) {
+            console.error('Error loading records:', error);
+            showAlert('Network error. Please check your connection.', 'danger');
+            resetUI();
         }
-       
-        updateBadgeCount();
     }
+    
     // -------------------------------
-    // Render list with thumbnails
+    // Render record list
     // -------------------------------
     function renderRecordList(records) {
         gpRecordsList.innerHTML = "";
+        
         if (records.length === 0) {
             gpRecordsList.innerHTML = `
                 <div class="empty-state">
@@ -843,270 +939,430 @@
                     <h5>No records found</h5>
                     <p class="info-text">Try changing your search or filter criteria</p>
                 </div>`;
+            updateRecordCount(0);
             return;
         }
+        
         records.forEach(rec => {
-            // CORRECT: use 'path' variable, not 'publicPath'
-            const path = rec.blobName || rec.blobUrl.split('patient-uploads/').pop();
-            const thumb = `
-                <div class="media-thumb-small">
-                    <img src="${API_BASE}/media/${path}"
-                         class="thumb-img"
-                         onerror="this.src='img/file-icon.png'"
-                         alt="thumbnail">
-                </div>
-            `;
-            const badgeClass = {
-                pending: "status-pending",
-                under_review: "status-under_review",
-                reviewed: "status-reviewed",
-                action_required: "status-action_required"
-            }[rec.status] || "status-pending";
+            const path = rec.blobName || extractBlobName(rec.blobUrl);
+            const badgeClass = getStatusBadgeClass(rec.status);
+            
             const row = document.createElement("div");
             row.className = "record-row glass-card";
             row.id = `row-${rec.id}`;
             row.innerHTML = `
                 <div class="d-flex align-items-center">
-                    ${thumb}
-                    <div class="ms-3 flex-grow-1">
-                        <strong>${rec.originalName}</strong><br>
-                        <span class="small text-muted">${new Date(rec.createdAt * 1000).toLocaleString()}</span>
+                    <div class="media-thumb-small">
+                        <img src="${API_BASE}/media/${path}"
+                             class="thumb-img"
+                             onerror="this.onerror=null;this.src='img/file-icon.png'"
+                             alt="thumbnail">
                     </div>
-                    <span class="status-badge ${badgeClass}">${rec.status.replace(/_/g, ' ')}</span>
+                    <div class="ms-3 flex-grow-1">
+                        <strong>${rec.originalName || 'Unnamed file'}</strong><br>
+                        <span class="small text-muted">${formatDate(rec.createdAt)}</span>
+                    </div>
+                    <span class="status-badge ${badgeClass}">${formatStatus(rec.status)}</span>
                 </div>
             `;
+            
             row.onclick = () => selectRecord(rec);
             gpRecordsList.appendChild(row);
         });
-       
+        
+        updateRecordCount(records.length);
         updateBadgeCount();
     }
+    
     // -------------------------------
-    // Select record → show detail panel
+    // Select record
     // -------------------------------
     function selectRecord(rec) {
         selectedRecord = rec;
+        
+        // Update row selection
         document.querySelectorAll(".record-row").forEach(r => r.classList.remove("selected-row"));
-        document.getElementById(`row-${rec.id}`).classList.add("selected-row");
+        const rowElement = document.getElementById(`row-${rec.id}`);
+        if (rowElement) {
+            rowElement.classList.add("selected-row");
+        }
+        
+        // Show detail panel
         detailContent.style.display = "block";
-        detailFile.textContent = rec.originalName;
-        detailDate.textContent = new Date(rec.createdAt * 1000).toLocaleString();
-       
-        // Update file type display
-        const fileType = rec.contentType || 'Unknown';
-        document.getElementById('detailType').textContent = fileType.split('/')[1]?.toUpperCase() || 'FILE';
-       
-        // Update status badge
-        const badgeClass = {
+        
+        // Populate details
+        detailFile.textContent = rec.originalName || 'Unnamed file';
+        detailDate.textContent = formatDate(rec.createdAt, true);
+        document.getElementById('detailType').textContent = getFileType(rec.contentType);
+        
+        // Update status
+        const badgeClass = getStatusBadgeClass(rec.status);
+        const statusText = formatStatus(rec.status);
+        detailStatusBadge.className = `status-badge ${badgeClass}`;
+        detailStatusBadge.textContent = statusText;
+        
+        // Set form values
+        detailStatus.value = rec.status || 'pending';
+        detailNotes.value = rec.gpNotes || "";
+        detailMsg.innerHTML = "";
+        
+        // Update UI badges
+        document.getElementById('detailBadge').textContent = 'Selected';
+        document.getElementById('detailBadge').className = 'badge bg-success';
+        
+        // Load preview
+        loadPreview(rec);
+    }
+    
+    // -------------------------------
+    // Load media preview
+    // -------------------------------
+    function loadPreview(rec) {
+        const path = rec.blobName || extractBlobName(rec.blobUrl);
+        detailPreview.innerHTML = '';
+        
+        if (!path) {
+            detailPreview.innerHTML = '<p class="text-muted">No preview available</p>';
+            return;
+        }
+        
+        const mediaUrl = `${API_BASE}/media/${path}`;
+        const contentType = rec.contentType || '';
+        
+        if (contentType.startsWith('image/')) {
+            const img = document.createElement('img');
+            img.src = mediaUrl;
+            img.alt = 'Patient upload';
+            img.className = 'img-fluid rounded';
+            img.style.maxHeight = '400px';
+            img.style.objectFit = 'contain';
+            img.onerror = () => {
+                img.src = 'img/file-icon.png';
+            };
+            detailPreview.appendChild(img);
+            document.getElementById('annotationTools').style.display = 'block';
+        } else if (contentType.startsWith('video/')) {
+            const video = document.createElement('video');
+            video.src = mediaUrl;
+            video.controls = true;
+            video.className = 'img-fluid rounded';
+            video.style.maxHeight = '400px';
+            detailPreview.appendChild(video);
+            document.getElementById('annotationTools').style.display = 'none';
+        } else if (contentType === 'application/pdf') {
+            const embed = document.createElement('embed');
+            embed.src = mediaUrl;
+            embed.type = 'application/pdf';
+            embed.style.width = '100%';
+            embed.style.height = '400px';
+            embed.className = 'rounded';
+            detailPreview.appendChild(embed);
+            document.getElementById('annotationTools').style.display = 'none';
+        } else {
+            const link = document.createElement('a');
+            link.href = mediaUrl;
+            link.target = '_blank';
+            link.className = 'btn btn-nhs-primary btn-lg';
+            link.innerHTML = '<i class="bi bi-download me-2"></i>Download File';
+            detailPreview.appendChild(link);
+            document.getElementById('annotationTools').style.display = 'none';
+        }
+    }
+    
+    // -------------------------------
+    // Save changes (UPDATE)
+    // -------------------------------
+    saveDetail.addEventListener("click", async () => {
+        if (!selectedRecord) {
+            showDetailMessage('No record selected', 'warning');
+            return;
+        }
+        
+        showDetailMessage('Saving changes...', 'info');
+        
+        try {
+            const updates = {
+                status: detailStatus.value,
+                gpNotes: detailNotes.value
+            };
+            
+            const res = await apiPut(`/record/${selectedRecord.id}`, updates);
+            
+            if (res && !res.error) {
+                showDetailMessage('Changes saved successfully!', 'success');
+                
+                // Update local record
+                selectedRecord.status = updates.status;
+                selectedRecord.gpNotes = updates.gpNotes;
+                
+                // Update UI
+                updateRecordInList(selectedRecord);
+                updateSelectedRecordUI(selectedRecord);
+                updateBadgeCount();
+                
+                // Refresh filter if active
+                if (filterStatus.value) {
+                    applyFilterStatus();
+                }
+                
+            } else {
+                showDetailMessage(res?.error || 'Error saving changes', 'danger');
+            }
+        } catch (error) {
+            console.error('Error saving:', error);
+            showDetailMessage('Network error while saving', 'danger');
+        }
+    });
+    
+    // -------------------------------
+    // Delete record (DELETE)
+    // -------------------------------
+    deleteDetail.addEventListener("click", async () => {
+        if (!selectedRecord) {
+            showDetailMessage('No record selected', 'warning');
+            return;
+        }
+        
+        const fileName = selectedRecord.originalName || 'this record';
+        if (!confirm(`Permanently delete "${fileName}"? This action cannot be undone.`)) {
+            return;
+        }
+        
+        showDetailMessage('Deleting record...', 'info');
+        
+        try {
+            const res = await apiDelete(`/record/${selectedRecord.id}`);
+            
+            if (!res.error) {
+                showDetailMessage('Record deleted successfully', 'success');
+                
+                // Remove from arrays
+                const allIndex = allRecords.findIndex(r => r.id === selectedRecord.id);
+                if (allIndex > -1) allRecords.splice(allIndex, 1);
+                
+                const filteredIndex = filteredRecords.findIndex(r => r.id === selectedRecord.id);
+                if (filteredIndex > -1) filteredRecords.splice(filteredIndex, 1);
+                
+                // Hide detail panel
+                detailContent.style.display = "none";
+                document.getElementById('detailBadge').textContent = 'Select record';
+                document.getElementById('detailBadge').className = 'badge bg-info';
+                
+                // Re-render list
+                renderRecordList(filteredRecords);
+                selectedRecord = null;
+                
+                // Update patient summary
+                updatePatientSummary();
+                
+            } else {
+                showDetailMessage(res?.error || 'Error deleting record', 'danger');
+            }
+        } catch (error) {
+            console.error('Error deleting:', error);
+            showDetailMessage('Network error while deleting', 'danger');
+        }
+    });
+    
+    // -------------------------------
+    // Filter records
+    // -------------------------------
+    function applyFilterStatus() {
+        const status = filterStatus.value;
+        
+        if (status) {
+            filteredRecords = allRecords.filter(r => r.status === status);
+        } else {
+            filteredRecords = [...allRecords];
+        }
+        
+        renderRecordList(filteredRecords);
+        updateBadgeCount();
+    }
+    
+    // -------------------------------
+    // Helper Functions
+    // -------------------------------
+    function extractBlobName(blobUrl) {
+        if (!blobUrl) return '';
+        const parts = blobUrl.split('patient-uploads/');
+        return parts.length > 1 ? parts[1] : '';
+    }
+    
+    function getStatusBadgeClass(status) {
+        const badgeClasses = {
             pending: "status-pending",
             under_review: "status-under_review",
             reviewed: "status-reviewed",
             action_required: "status-action_required"
-        }[rec.status] || "status-pending";
-       
-        const statusText = rec.status.replace(/_/g, ' ');
-        document.getElementById('detailStatusBadge').className = `status-badge ${badgeClass}`;
-        document.getElementById('detailStatusBadge').textContent = statusText;
-       
-        detailStatus.value = rec.status;
-        detailNotes.value = rec.gpNotes || "";
-        detailMsg.textContent = "";
-       
-        // Update detail panel badge
-        document.getElementById('detailBadge').textContent = 'Selected';
-        document.getElementById('detailBadge').className = 'badge bg-success';
-
-        // Update preview
-        const path = rec.blobName || rec.blobUrl.split('patient-uploads/').pop();
-        const previewDiv = document.getElementById('detailPreview');
-        previewDiv.innerHTML = '';
-        let previewElement;
-        if (rec.contentType.startsWith('image/')) {
-            previewElement = document.createElement('img');
-            previewElement.src = `${API_BASE}/media/${path}`;
-            previewElement.alt = 'Patient upload';
-            previewElement.className = 'img-fluid';
-            document.getElementById('annotationTools').style.display = 'block';
-        } else if (rec.contentType.startsWith('video/')) {
-            previewElement = document.createElement('video');
-            previewElement.src = `${API_BASE}/media/${path}`;
-            previewElement.controls = true;
-            previewElement.className = 'img-fluid';
-            document.getElementById('annotationTools').style.display = 'none';
-        } else {
-            previewElement = document.createElement('a');
-            previewElement.href = `${API_BASE}/media/${path}`;
-            previewElement.target = '_blank';
-            previewElement.className = 'btn btn-nhs-primary';
-            previewElement.textContent = 'View/Download File';
-            document.getElementById('annotationTools').style.display = 'none';
-        }
-        previewDiv.appendChild(previewElement);
+        };
+        return badgeClasses[status] || "status-pending";
     }
-    // -------------------------------
-    // Save / Delete
-    // -------------------------------
-    saveDetail.addEventListener("click", async () => {
-        if (!selectedRecord) return;
-       
-        detailMsg.innerHTML = '<div class="alert alert-info alert-dismissible fade show" role="alert">Saving changes...<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-       
-        const res = await apiPut(`/record/${selectedRecord.id}`, {
-            status: detailStatus.value,
-            gpNotes: detailNotes.value
-        });
-       
-        if (res && !res.error) {
-            detailMsg.innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert">Changes saved successfully!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-           
-            // Update the record locally
-            selectedRecord.status = detailStatus.value;
-            selectedRecord.gpNotes = detailNotes.value;
-           
-            // Update the selected row
-            const badgeClass = {
-                pending: "status-pending",
-                under_review: "status-under_review",
-                reviewed: "status-reviewed",
-                action_required: "status-action_required"
-            }[selectedRecord.status] || "status-pending";
-           
-            const statusBadge = document.querySelector(`#row-${selectedRecord.id} .status-badge`);
-            if (statusBadge) {
-                statusBadge.className = `status-badge ${badgeClass}`;
-                statusBadge.textContent = selectedRecord.status.replace(/_/g, ' ');
-            }
-           
-            // Update the detail badge
-            document.getElementById('detailStatusBadge').className = `status-badge ${badgeClass}`;
-            document.getElementById('detailStatusBadge').textContent = selectedRecord.status.replace(/_/g, ' ');
-           
-            updateBadgeCount();
-           
-            setTimeout(() => {
-                if (detailMsg.querySelector('.alert')) {
-                    detailMsg.querySelector('.alert').remove();
-                }
-            }, 3000);
-        } else {
-            detailMsg.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Error saving changes<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-        }
-    });
-    deleteDetail.addEventListener("click", async () => {
-        if (!selectedRecord || !confirm("Permanently delete this record?")) return;
-       
-        const res = await apiDelete(`/record/${selectedRecord.id}`);
-        if (!res.error) {
-            detailContent.style.display = "none";
-            document.getElementById('detailBadge').textContent = 'Select record';
-            document.getElementById('detailBadge').className = 'badge bg-info';
-            loadGpRecords();
-        } else {
-            detailMsg.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">Error deleting record<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-        }
-    });
-    // -------------------------------
-    // Filter
-    // -------------------------------
-    function applyFilterStatus() {
-        const status = filterStatus.value;
-        const filtered = status ? currentRecords.filter(r => r.status === status) : currentRecords;
-        renderRecordList(filtered);
+    
+    function formatStatus(status) {
+        if (!status) return 'pending';
+        return status.replace(/_/g, ' ');
     }
-    // -------------------------------
-    // Helper functions
-    // -------------------------------
+    
+    function formatDate(timestamp, includeTime = false) {
+        if (!timestamp) return 'Unknown date';
+        const date = new Date(timestamp * 1000);
+        
+        if (includeTime) {
+            return date.toLocaleString();
+        }
+        return date.toLocaleDateString();
+    }
+    
+    function getFileType(contentType) {
+        if (!contentType) return 'FILE';
+        const parts = contentType.split('/');
+        return parts.length > 1 ? parts[1].toUpperCase() : contentType.toUpperCase();
+    }
+    
+    function updateRecordInList(record) {
+        const row = document.getElementById(`row-${record.id}`);
+        if (!row) return;
+        
+        const badgeClass = getStatusBadgeClass(record.status);
+        const statusBadge = row.querySelector('.status-badge');
+        if (statusBadge) {
+            statusBadge.className = `status-badge ${badgeClass}`;
+            statusBadge.textContent = formatStatus(record.status);
+        }
+    }
+    
+    function updateSelectedRecordUI(record) {
+        const badgeClass = getStatusBadgeClass(record.status);
+        detailStatusBadge.className = `status-badge ${badgeClass}`;
+        detailStatusBadge.textContent = formatStatus(record.status);
+    }
+    
+    function updateRecordCount(count) {
+        document.getElementById('gpRecordCount').textContent = `${count} record${count !== 1 ? 's' : ''}`;
+    }
+    
     function updateBadgeCount() {
-        if (!currentRecords || currentRecords.length === 0) {
+        if (!allRecords || allRecords.length === 0) {
             document.getElementById('pendingCount').textContent = '0';
             return;
         }
-       
-        const pendingCount = currentRecords.filter(r => r.status === 'pending').length;
+        
+        const pendingCount = allRecords.filter(r => r.status === 'pending').length;
         document.getElementById('pendingCount').textContent = pendingCount;
     }
-    // Annotation functionality
-    const annotateBtn = document.getElementById('annotateBtn');
-    annotateBtn.addEventListener('click', startAnnotation);
-    function startAnnotation() {
-        if (!selectedRecord || !selectedRecord.contentType.startsWith('image/')) return;
-        const path = selectedRecord.blobName || selectedRecord.blobUrl.split('patient-uploads/').pop();
-        const previewDiv = document.getElementById('detailPreview');
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const img = new Image();
-        img.src = `${API_BASE}/media/${path}`;
-        img.onload = () => {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
-            previewDiv.innerHTML = '';
-            previewDiv.appendChild(canvas);
-            // Add annotation tools
-            const toolsDiv = document.createElement('div');
-            toolsDiv.className = 'd-flex justify-content-center gap-2 mt-3';
-            toolsDiv.innerHTML = `
-                <select id="annoColor" class="form-select w-auto">
-                    <option value="red">Red</option>
-                    <option value="green">Green</option>
-                    <option value="blue">Blue</option>
-                    <option value="black">Black</option>
-                </select>
-                <select id="annoWidth" class="form-select w-auto">
-                    <option value="3">Thin</option>
-                    <option value="5">Medium</option>
-                    <option value="8">Thick</option>
-                </select>
-                <button id="clearAnno" class="btn btn-warning"><i class="bi bi-eraser me-2"></i>Clear</button>
-                <button id="saveAnno" class="btn btn-success"><i class="bi bi-save me-2"></i>Save</button>
-                <button id="cancelAnno" class="btn btn-secondary"><i class="bi bi-x me-2"></i>Cancel</button>
-            `;
-            previewDiv.appendChild(toolsDiv);
-            // Drawing logic
-            let drawing = false;
-            let color = 'red';
-            let lineWidth = 3;
-            document.getElementById('annoColor').addEventListener('change', e => color = e.target.value);
-            document.getElementById('annoWidth').addEventListener('change', e => lineWidth = parseInt(e.target.value));
-            canvas.addEventListener('mousedown', e => {
-                drawing = true;
-                ctx.beginPath();
-                ctx.moveTo(e.offsetX, e.offsetY);
-            });
-            canvas.addEventListener('mousemove', e => {
-                if (!drawing) return;
-                ctx.lineTo(e.offsetX, e.offsetY);
-                ctx.strokeStyle = color;
-                ctx.lineWidth = lineWidth;
-                ctx.stroke();
-            });
-            canvas.addEventListener('mouseup', () => drawing = false);
-            canvas.addEventListener('mouseout', () => drawing = false);
-            document.getElementById('clearAnno').addEventListener('click', () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(img, 0, 0);
-            });
-            document.getElementById('cancelAnno').addEventListener('click', () => {
-                selectRecord(selectedRecord); // Reset to original
-            });
-            document.getElementById('saveAnno').addEventListener('click', () => {
-                canvas.toBlob(blob => {
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'annotated_' + selectedRecord.originalName;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                    detailMsg.innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert">Annotated image downloaded!<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>';
-                    setTimeout(() => {
-                        if (detailMsg.querySelector('.alert')) {
-                            detailMsg.querySelector('.alert').remove();
-                        }
-                    }, 3000);
-                }, 'image/png');
-            });
-        };
+    
+    function updateUIAfterLoad(pid) {
+        // Update search badge
+        document.getElementById('searchBadge').className = 'badge bg-success';
+        document.getElementById('searchBadge').textContent = 'Loaded';
+        
+        // Update patient summary
+        const patientSummary = document.getElementById('patientSummary');
+        if (allRecords.length > 0) {
+            patientSummary.style.display = 'block';
+            document.getElementById('summaryPatientId').textContent = `Patient: ${pid}`;
+            document.getElementById('summaryRecordCount').textContent = `${allRecords.length} record(s)`;
+            
+            // Find most recent upload
+            const latest = allRecords.reduce((latest, record) => {
+                return record.createdAt > latest.createdAt ? record : latest;
+            }, allRecords[0]);
+            
+            const latestDate = formatDate(latest.createdAt);
+            document.getElementById('summaryLastUpload').textContent = `Last upload: ${latestDate}`;
+        } else {
+            patientSummary.style.display = 'none';
+        }
     }
+    
+    function updatePatientSummary() {
+        const pid = gpInput.value.trim();
+        if (!pid) return;
+        
+        const patientSummary = document.getElementById('patientSummary');
+        if (allRecords.length > 0) {
+            patientSummary.style.display = 'block';
+            document.getElementById('summaryRecordCount').textContent = `${allRecords.length} record(s)`;
+            
+            const latest = allRecords.reduce((latest, record) => {
+                return record.createdAt > latest.createdAt ? record : latest;
+            }, allRecords[0]);
+            
+            const latestDate = formatDate(latest.createdAt);
+            document.getElementById('summaryLastUpload').textContent = `Last upload: ${latestDate}`;
+        } else {
+            patientSummary.style.display = 'none';
+        }
+    }
+    
+    function resetUI() {
+        allRecords = [];
+        filteredRecords = [];
+        selectedRecord = null;
+        gpRecordsList.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="bi bi-file-earmark-medical"></i>
+                </div>
+                <h5>No patient records loaded</h5>
+                <p class="info-text">Enter a Patient ID and click "Load Patient Records" to begin</p>
+            </div>`;
+        
+        detailContent.style.display = "none";
+        document.getElementById('searchBadge').className = 'badge bg-secondary';
+        document.getElementById('searchBadge').textContent = 'Ready';
+        document.getElementById('gpRecordCount').textContent = '0 records';
+        document.getElementById('patientSummary').style.display = 'none';
+        document.getElementById('pendingCount').textContent = '0';
+    }
+    
+    function showAlert(message, type = 'info') {
+        // Create alert element
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        // Insert at top of main content
+        const main = document.querySelector('main');
+        main.insertBefore(alertDiv, main.firstChild);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+    
+    function showDetailMessage(message, type = 'info') {
+        detailMsg.innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        
+        setTimeout(() => {
+            const alert = detailMsg.querySelector('.alert');
+            if (alert) {
+                alert.remove();
+            }
+        }, 3000);
+    }
+    
+    // Annotation functionality (optional)
+    document.getElementById('annotateBtn')?.addEventListener('click', function() {
+        if (!selectedRecord || !selectedRecord.contentType?.startsWith('image/')) {
+            alert("Please select an image file to annotate");
+            return;
+        }
+        alert("Annotation feature - This would open an image editor in a real implementation");
+    });
+    
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
         // Optional: Auto-load a sample patient for demo

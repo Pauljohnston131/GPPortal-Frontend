@@ -1,4 +1,4 @@
-// Set API base URL (local for dev)
+// api.js - Keep this as is
 const API_BASE = window.location.hostname.includes("azurewebsites.net")
   ? "https://gpportal-api-hmd0bjameudkarc5.uksouth-01.azurewebsites.net"
   : "http://127.0.0.1:8000";
