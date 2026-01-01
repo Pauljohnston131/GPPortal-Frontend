@@ -20,6 +20,7 @@
             --nhs-mid-grey: #dce3e8;
             --nhs-white: #ffffff;
             --nhs-black: #231f20;
+            --unread-indicator: #ff4757;
         }
         
         /* Navigation Bar */
@@ -97,6 +98,24 @@
             color: var(--navy-blue);
             font-size: 1rem;
             flex-shrink: 0;
+            position: relative;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--unread-indicator);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid var(--navy-blue);
         }
         
         body {
@@ -107,7 +126,7 @@
             min-height: 100vh;
             width: 100%;
             box-sizing: border-box;
-            padding-top: 120px; /* Adjusted for fixed navbar */
+            padding-top: 120px;
             padding-left: 1.5rem;
             padding-right: 1.5rem;
             padding-bottom: 3rem;
@@ -118,6 +137,11 @@
             margin-bottom: 2rem;
             padding-bottom: 1.5rem;
             border-bottom: 2px solid rgba(45, 55, 101, 0.12);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .page-title {
@@ -206,6 +230,157 @@
             margin-bottom: 0.5rem;
         }
 
+        /* Communication Panel */
+        .communication-panel {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: rgba(248, 249, 255, 0.5);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+        
+        .message {
+            max-width: 80%;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 15px;
+            position: relative;
+        }
+        
+        .message-patient {
+            background: linear-gradient(135deg, rgba(114, 207, 212, 0.2), rgba(114, 207, 212, 0.1));
+            border: 1px solid rgba(114, 207, 212, 0.3);
+            margin-left: auto;
+        }
+        
+        .message-gp {
+            background: linear-gradient(135deg, rgba(45, 55, 101, 0.1), rgba(45, 55, 101, 0.05));
+            border: 1px solid rgba(45, 55, 101, 0.2);
+            margin-right: auto;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+        }
+        
+        .message-sender {
+            font-weight: 600;
+            color: var(--nhs-dark-blue);
+        }
+        
+        .message-time {
+            color: var(--nhs-grey);
+            font-size: 0.75rem;
+        }
+        
+        .message-content {
+            word-wrap: break-word;
+        }
+        
+        .message-file {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+        
+        .unread-message {
+            border-left: 4px solid var(--unread-indicator);
+        }
+        
+        .message-input-container {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .message-input {
+            flex: 1;
+            border-radius: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .message-input:focus {
+            border-color: var(--nhs-aqua);
+            box-shadow: 0 0 0 0.25rem rgba(114, 207, 212, 0.25);
+            background: white;
+            outline: none;
+        }
+        
+        .send-btn {
+            background: linear-gradient(135deg, var(--nhs-green), var(--nhs-light-green));
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 150, 57, 0.25);
+        }
+        
+        /* File Upload Thumbnails */
+        .upload-thumbnails {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        
+        .upload-thumbnail {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .thumbnail-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .thumbnail-remove {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: rgba(255, 71, 87, 0.9);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+        
         /* Form Elements */
         .form-control, .form-select {
             border-radius: 12px;
@@ -275,6 +450,39 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 26px rgba(114, 207, 212, 0.45);
         }
+        
+        /* Communication Action Bar */
+        .communication-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--nhs-dark-blue);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .action-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .action-btn.active {
+            background: linear-gradient(135deg, rgba(114, 207, 212, 0.2), rgba(114, 207, 212, 0.1));
+            border: 1px solid var(--nhs-aqua);
+        }
 
         /* Upload Area - Enhanced */
         .upload-area {
@@ -330,6 +538,18 @@
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
             border-color: var(--nhs-aqua);
         }
+        
+        .record-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .record-card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
 
         .preview-img {
             width: 80px;
@@ -338,6 +558,33 @@
             border-radius: 8px;
             border: 2px solid white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .video-thumbnail {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .video-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--nhs-dark-blue);
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .video-play-btn:hover {
+            background: white;
+            transform: translate(-50%, -50%) scale(1.1);
         }
 
         /* Status Badges */
@@ -413,6 +660,25 @@
         .bg-purple {
             background: linear-gradient(135deg, #6c63ff, #5a52d5) !important;
         }
+        
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #2D3765, #3b4a68);
+            color: white;
+            border-radius: 20px 20px 0 0;
+            border: none;
+            padding: 1.5rem;
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
 
         /* Layout */
         .main-grid {
@@ -421,6 +687,18 @@
             gap: 2rem;
             max-width: 1200px;
             margin: 0 auto;
+        }
+        
+        .two-column-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        @media (max-width: 992px) {
+            .two-column-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Responsive Design */
@@ -436,6 +714,19 @@
             .patient-badge {
                 padding: 0.4rem 0.8rem;
                 font-size: 0.85rem;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .communication-actions {
+                flex-wrap: wrap;
+            }
+            
+            .action-btn {
+                min-width: calc(50% - 0.25rem);
             }
         }
 
@@ -469,6 +760,10 @@
                 font-size: 0.8rem;
                 padding: 0.4rem 0.8rem;
             }
+            
+            .two-column-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         @media (max-width: 576px) {
@@ -478,6 +773,10 @@
 
             .patient-badge {
                 padding: 0.5rem 0.9rem;
+            }
+            
+            .action-btn {
+                min-width: 100%;
             }
         }
     </style>
@@ -497,11 +796,12 @@
         <!-- Right: Patient Info -->
         <div class="patient-info">
             <div class="patient-details text-end">
-                <div class="fw-semibold">Welcome</div>
+                <div class="fw-semibold" id="patientName">Welcome</div>
                 <div class="small opacity-75">Medical Evidence Portal</div>
             </div>
             <div class="patient-icon">
                 <i class="bi bi-person-fill"></i>
+                <div class="notification-badge" id="notificationCount" style="display: none;">0</div>
             </div>
         </div>
     </div>
@@ -511,8 +811,13 @@
 <main class="container-fluid">
     <!-- Dashboard Header -->
     <div class="dashboard-header">
-        <h2 class="page-title">Upload Medical Evidence</h2>
-        <p class="greeting-text" id="currentDate">Loading date...</p>
+        <div>
+            <h2 class="page-title">Medical Evidence Portal</h2>
+            <p class="greeting-text" id="currentDate">Loading date...</p>
+        </div>
+        <button class="btn btn-nhs-primary" data-bs-toggle="modal" data-bs-target="#helpModal">
+            <i class="bi bi-question-circle me-2"></i>Help & Support
+        </button>
     </div>
 
     <!-- Patient Info Bar -->
@@ -521,21 +826,46 @@
             <div class="patient-id-display" id="patientIdDisplay">Patient ID: Not entered</div>
             <div class="info-text">Enter your Patient ID to view and manage your uploads</div>
         </div>
-        <button class="btn btn-nhs-secondary" id="refreshBtn">
-            <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+        <div class="d-flex gap-2">
+            <button class="btn btn-nhs-secondary" id="refreshBtn">
+                <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+            </button>
+            <button class="btn btn-nhs-primary" id="checkMessagesBtn">
+                <i class="bi bi-chat-dots me-2"></i>Check Messages
+            </button>
+        </div>
+    </div>
+    
+    <!-- Communication Action Bar -->
+    <div class="communication-actions">
+        <button class="action-btn active" id="btnUpload">
+            <i class="bi bi-cloud-arrow-up"></i>
+            Upload Evidence
+        </button>
+        <button class="action-btn" id="btnMessages">
+            <i class="bi bi-chat-text"></i>
+            GP Messages <span class="badge bg-danger ms-1" id="unreadBadge">0</span>
+        </button>
+        <button class="action-btn" id="btnRecords">
+            <i class="bi bi-file-earmark-medical"></i>
+            My Records
+        </button>
+        <button class="action-btn" id="btnAppointments">
+            <i class="bi bi-calendar-check"></i>
+            Appointments
         </button>
     </div>
 
     <!-- Main Content Grid -->
     <div class="main-grid">
-        <!-- Upload Panel -->
-        <div class="panel">
+        <!-- Upload Panel (Default View) -->
+        <div class="panel" id="uploadPanel">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3 class="panel-title mb-0">Submit Medical Evidence</h3>
                 <span class="badge bg-purple text-white">Secure Upload</span>
             </div>
             
-            <p class="info-text mb-4">Upload images, documents, or PDFs related to your symptoms or condition for your GP to review.</p>
+            <p class="info-text mb-4">Upload images, documents, or videos related to your symptoms or condition for your GP to review.</p>
 
             <form id="uploadForm" class="mt-4">
                 <div class="mb-4">
@@ -545,17 +875,23 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label">Select File to Upload</label>
+                    <label class="form-label">Select File(s) to Upload</label>
                     <div class="upload-area" id="uploadArea">
-                        <input type="file" id="fileInput" class="d-none" accept="image/*,application/pdf" required>
+                        <input type="file" id="fileInput" class="d-none" accept="image/*,application/pdf,video/*" multiple required>
                         <div class="upload-icon">
                             <i class="bi bi-cloud-arrow-up-fill"></i>
                         </div>
-                        <h5>Upload your file</h5>
-                        <p class="info-text">Click to browse or drag and drop a file here</p>
-                        <p class="info-text">Supported formats: JPG, PNG, PDF (Max 10MB)</p>
+                        <h5>Upload your files</h5>
+                        <p class="info-text">Click to browse or drag and drop files here</p>
+                        <p class="info-text">Supported formats: JPG, PNG, PDF, MP4, MOV (Max 20MB each)</p>
                         <div id="selectedFileName" class="mt-3 fw-bold text-primary" style="display: none;"></div>
                     </div>
+                    <div id="fileThumbnails" class="upload-thumbnails"></div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">Add a Note (Optional)</label>
+                    <textarea id="uploadNote" class="form-control" rows="3" placeholder="Add any notes about these files for your GP..."></textarea>
                 </div>
 
                 <!-- Progress bar -->
@@ -570,9 +906,36 @@
 
             <div id="msg" class="mt-3 text-center"></div>
         </div>
+        
+        <!-- Messages Panel (Hidden by default) -->
+        <div class="panel" id="messagesPanel" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="panel-title mb-0">Messages from Your GP</h3>
+                <span class="badge bg-success text-white" id="gpNameBadge">GP: Dr. Smith</span>
+            </div>
+            
+            <div class="communication-panel">
+                <div class="messages-container" id="messagesContainer">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="bi bi-chat-left-text"></i>
+                        </div>
+                        <h5>No messages yet</h5>
+                        <p class="info-text">Your GP will message you here about your records</p>
+                    </div>
+                </div>
+                
+                <div class="message-input-container">
+                    <input type="text" id="messageInput" class="message-input" placeholder="Type your message here..." disabled>
+                    <button id="sendMessageBtn" class="send-btn" disabled>
+                        <i class="bi bi-send me-1"></i>Send
+                    </button>
+                </div>
+            </div>
+        </div>
 
-        <!-- Records Panel -->
-        <div class="panel">
+        <!-- Records Panel (Hidden by default) -->
+        <div class="panel" id="recordsPanel" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3 class="panel-title mb-0">Your Uploaded Records</h3>
                 <span class="badge bg-secondary" id="recordCount">0 records</span>
@@ -588,8 +951,75 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Appointments Panel (Hidden by default) -->
+        <div class="panel" id="appointmentsPanel" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="panel-title mb-0">Upcoming Appointments</h3>
+                <button class="btn btn-nhs-primary btn-sm" id="requestAppointmentBtn">
+                    <i class="bi bi-plus-circle me-1"></i>Request Appointment
+                </button>
+            </div>
+            
+            <div id="appointmentsList" class="mt-3">
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-calendar"></i>
+                    </div>
+                    <h5>No upcoming appointments</h5>
+                    <p class="info-text">Request an appointment with your GP</p>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
+
+<!-- Help Modal -->
+<div class="modal fade" id="helpModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Help & Support</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h6><i class="bi bi-upload text-primary me-2"></i>Uploading Files</h6>
+                        <p class="small">You can upload multiple files at once. Supported formats include images (JPG, PNG), PDFs, and videos (MP4, MOV). Maximum file size is 20MB per file.</p>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <h6><i class="bi bi-chat text-success me-2"></i>GP Communication</h6>
+                        <p class="small">Message your GP directly about your uploads. Your GP can review your files and respond with notes or questions.</p>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <h6><i class="bi bi-shield-check text-info me-2"></i>Security</h6>
+                        <p class="small">All uploads are encrypted and secure. Only your healthcare team has access to your files.</p>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <h6><i class="bi bi-headset text-warning me-2"></i>Technical Support</h6>
+                        <p class="small">For technical issues, please contact: <strong>support@medicalportal.nhs.uk</strong> or call <strong>0300 123 4567</strong>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Video Preview Modal -->
+<div class="modal fade" id="videoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Video Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <video id="videoPlayer" controls style="width: 100%; max-height: 70vh;"></video>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/api.js"></script>
@@ -611,6 +1041,19 @@
         const fileInput = document.getElementById('fileInput');
         const selectedFileName = document.getElementById('selectedFileName');
         const refreshBtn = document.getElementById('refreshBtn');
+        const checkMessagesBtn = document.getElementById('checkMessagesBtn');
+        const fileThumbnails = document.getElementById('fileThumbnails');
+        
+        // View switching
+        const btnUpload = document.getElementById('btnUpload');
+        const btnMessages = document.getElementById('btnMessages');
+        const btnRecords = document.getElementById('btnRecords');
+        const btnAppointments = document.getElementById('btnAppointments');
+        
+        const uploadPanel = document.getElementById('uploadPanel');
+        const messagesPanel = document.getElementById('messagesPanel');
+        const recordsPanel = document.getElementById('recordsPanel');
+        const appointmentsPanel = document.getElementById('appointmentsPanel');
         
         // Update patient ID display
         patientIdInput.addEventListener('input', function() {
@@ -618,25 +1061,20 @@
             if (pid) {
                 patientIdDisplay.textContent = `Patient ID: ${pid}`;
                 patientIdDisplay.style.color = 'var(--nhs-dark-blue)';
+                loadPatientData(pid);
             } else {
                 patientIdDisplay.textContent = 'Patient ID: Not entered';
                 patientIdDisplay.style.color = 'var(--nhs-grey)';
             }
         });
         
-        // Enhanced file upload area interaction
+        // Enhanced file upload area interaction with multiple files
         uploadArea.addEventListener('click', function() {
             fileInput.click();
         });
         
         fileInput.addEventListener('change', function() {
-            if (fileInput.files.length > 0) {
-                const fileName = fileInput.files[0].name;
-                selectedFileName.innerHTML = `<i class="bi bi-file-earmark-text me-2"></i>${fileName}`;
-                selectedFileName.style.display = 'block';
-            } else {
-                selectedFileName.style.display = 'none';
-            }
+            updateFileThumbnails();
         });
         
         // Drag and drop functionality
@@ -647,8 +1085,8 @@
                 <div class="upload-icon">
                     <i class="bi bi-cloud-check-fill"></i>
                 </div>
-                <h5>Drop file to upload</h5>
-                <p class="info-text">Release to upload your file</p>
+                <h5>Drop files to upload</h5>
+                <p class="info-text">Release to upload your files</p>
             `;
         });
         
@@ -663,58 +1101,286 @@
             
             if (e.dataTransfer.files.length) {
                 fileInput.files = e.dataTransfer.files;
-                const fileName = fileInput.files[0].name;
-                selectedFileName.innerHTML = `<i class="bi bi-file-earmark-text me-2"></i>${fileName}`;
-                selectedFileName.style.display = 'block';
+                updateFileThumbnails();
                 resetUploadArea();
             }
         });
         
         function resetUploadArea() {
             uploadArea.innerHTML = `
-                <input type="file" id="fileInput" class="d-none" accept="image/*,application/pdf" required>
+                <input type="file" id="fileInput" class="d-none" accept="image/*,application/pdf,video/*" multiple required>
                 <div class="upload-icon">
                     <i class="bi bi-cloud-arrow-up-fill"></i>
                 </div>
-                <h5>Upload your file</h5>
-                <p class="info-text">Click to browse or drag and drop a file here</p>
-                <p class="info-text">Supported formats: JPG, PNG, PDF (Max 10MB)</p>
+                <h5>Upload your files</h5>
+                <p class="info-text">Click to browse or drag and drop files here</p>
+                <p class="info-text">Supported formats: JPG, PNG, PDF, MP4, MOV (Max 20MB each)</p>
                 <div id="selectedFileName" class="mt-3 fw-bold text-primary" style="display: none;"></div>
             `;
-            // Reattach the selectedFileName element reference
-            selectedFileName.display = 'none';
+            // Reattach event listeners
+            document.getElementById('fileInput').addEventListener('change', updateFileThumbnails);
         }
         
-        // Refresh button functionality
-        refreshBtn.addEventListener('click', function() {
-            const pid = patientIdInput.value.trim();
-            if (pid) {
-                // Simulate refresh action
-                refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Refreshing...';
-                setTimeout(() => {
-                    refreshBtn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Refresh';
-                    // In a real implementation, this would reload records
-                    alert('Records refreshed!');
-                }, 1000);
-            } else {
-                alert('Please enter a Patient ID first');
+        function updateFileThumbnails() {
+            fileThumbnails.innerHTML = '';
+            if (fileInput.files.length > 0) {
+                Array.from(fileInput.files).forEach((file, index) => {
+                    const thumbnail = document.createElement('div');
+                    thumbnail.className = 'upload-thumbnail';
+                    
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            thumbnail.innerHTML = `
+                                <img src="${e.target.result}" class="thumbnail-img" alt="${file.name}">
+                                <div class="thumbnail-remove" data-index="${index}">×</div>
+                            `;
+                        };
+                        reader.readAsDataURL(file);
+                    } else if (file.type.startsWith('video/')) {
+                        thumbnail.innerHTML = `
+                            <div class="thumbnail-img bg-light d-flex align-items-center justify-content-center">
+                                <i class="bi bi-file-earmark-play-fill fs-4 text-muted"></i>
+                            </div>
+                            <div class="thumbnail-remove" data-index="${index}">×</div>
+                        `;
+                    } else {
+                        thumbnail.innerHTML = `
+                            <div class="thumbnail-img bg-light d-flex align-items-center justify-content-center">
+                                <i class="bi bi-file-earmark-text-fill fs-4 text-muted"></i>
+                            </div>
+                            <div class="thumbnail-remove" data-index="${index}">×</div>
+                        `;
+                    }
+                    
+                    fileThumbnails.appendChild(thumbnail);
+                });
+                
+                // Add remove functionality
+                document.querySelectorAll('.thumbnail-remove').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const index = parseInt(this.getAttribute('data-index'));
+                        const dt = new DataTransfer();
+                        const files = Array.from(fileInput.files);
+                        files.splice(index, 1);
+                        files.forEach(file => dt.items.add(file));
+                        fileInput.files = dt.files;
+                        updateFileThumbnails();
+                    });
+                });
+            }
+        }
+        
+        // View switching functionality
+        btnUpload.addEventListener('click', function() {
+            switchView('upload');
+        });
+        
+        btnMessages.addEventListener('click', function() {
+            switchView('messages');
+        });
+        
+        btnRecords.addEventListener('click', function() {
+            switchView('records');
+        });
+        
+        btnAppointments.addEventListener('click', function() {
+            switchView('appointments');
+        });
+        
+        function switchView(view) {
+            // Hide all panels
+            uploadPanel.style.display = 'none';
+            messagesPanel.style.display = 'none';
+            recordsPanel.style.display = 'none';
+            appointmentsPanel.style.display = 'none';
+            
+            // Remove active class from all buttons
+            btnUpload.classList.remove('active');
+            btnMessages.classList.remove('active');
+            btnRecords.classList.remove('active');
+            btnAppointments.classList.remove('active');
+            
+            // Show selected panel and activate button
+            switch(view) {
+                case 'upload':
+                    uploadPanel.style.display = 'block';
+                    btnUpload.classList.add('active');
+                    break;
+                case 'messages':
+                    messagesPanel.style.display = 'block';
+                    btnMessages.classList.add('active');
+                    loadMessages();
+                    break;
+                case 'records':
+                    recordsPanel.style.display = 'block';
+                    btnRecords.classList.add('active');
+                    loadRecords();
+                    break;
+                case 'appointments':
+                    appointmentsPanel.style.display = 'block';
+                    btnAppointments.classList.add('active');
+                    loadAppointments();
+                    break;
+            }
+        }
+        
+        async function loadPatientData(patientId) {
+            try {
+                const data = await apiGet(`/patient/${patientId}`);
+                if (data.name) {
+                    document.getElementById('patientName').textContent = `Welcome, ${data.name}`;
+                }
+                if (data.gpName) {
+                    document.getElementById('gpNameBadge').textContent = `GP: ${data.gpName}`;
+                }
+                if (data.unreadMessages > 0) {
+                    document.getElementById('unreadBadge').textContent = data.unreadMessages;
+                    document.getElementById('notificationCount').textContent = data.unreadMessages;
+                    document.getElementById('notificationCount').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading patient data:', error);
+            }
+        }
+        
+        async function loadMessages() {
+            const patientId = patientIdInput.value.trim();
+            if (!patientId) return;
+            
+            try {
+                const data = await apiGet(`/messages/${patientId}`);
+                displayMessages(data.messages || []);
+            } catch (error) {
+                console.error('Error loading messages:', error);
+            }
+        }
+        
+        function displayMessages(messages) {
+            const container = document.getElementById('messagesContainer');
+            if (messages.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="bi bi-chat-left-text"></i>
+                        </div>
+                        <h5>No messages yet</h5>
+                        <p class="info-text">Your GP will message you here about your records</p>
+                    </div>`;
+                return;
+            }
+            
+            container.innerHTML = '';
+            messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${msg.sender === 'patient' ? 'message-patient' : 'message-gp'} ${msg.unread ? 'unread-message' : ''}`;
+                
+                let fileHtml = '';
+                if (msg.fileUrl) {
+                    fileHtml = `
+                        <div class="message-file">
+                            <i class="bi bi-paperclip"></i>
+                            <a href="${msg.fileUrl}" target="_blank" class="small">${msg.fileName || 'Attachment'}</a>
+                        </div>
+                    `;
+                }
+                
+                messageDiv.innerHTML = `
+                    <div class="message-header">
+                        <span class="message-sender">${msg.sender === 'patient' ? 'You' : 'GP'}</span>
+                        <span class="message-time">${new Date(msg.timestamp).toLocaleString()}</span>
+                    </div>
+                    <div class="message-content">${msg.content}</div>
+                    ${fileHtml}
+                `;
+                
+                container.appendChild(messageDiv);
+            });
+            
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        async function loadAppointments() {
+            const patientId = patientIdInput.value.trim();
+            if (!patientId) return;
+            
+            try {
+                const data = await apiGet(`/appointments/${patientId}`);
+                displayAppointments(data.appointments || []);
+            } catch (error) {
+                console.error('Error loading appointments:', error);
+            }
+        }
+        
+        function displayAppointments(appointments) {
+            const container = document.getElementById('appointmentsList');
+            if (appointments.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="bi bi-calendar"></i>
+                        </div>
+                        <h5>No upcoming appointments</h5>
+                        <p class="info-text">Request an appointment with your GP</p>
+                    </div>`;
+                return;
+            }
+            
+            container.innerHTML = '';
+            appointments.forEach(appt => {
+                const apptDiv = document.createElement('div');
+                apptDiv.className = 'record-card';
+                apptDiv.innerHTML = `
+                    <div class="record-card-header">
+                        <div>
+                            <strong>${appt.type} Appointment</strong>
+                            <div class="small text-muted mt-1">
+                                <i class="bi bi-calendar me-1"></i>${new Date(appt.date).toLocaleDateString()}
+                                <i class="bi bi-clock ms-2 me-1"></i>${appt.time}
+                            </div>
+                        </div>
+                        <span class="status-badge status-${appt.status}">${appt.status}</span>
+                    </div>
+                    ${appt.notes ? `<p class="mb-2">${appt.notes}</p>` : ''}
+                    <div class="record-card-actions">
+                        ${appt.videoLink ? `
+                            <a href="${appt.videoLink}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-camera-video me-1"></i>Join Video Call
+                            </a>
+                        ` : ''}
+                        <button class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-calendar-x me-1"></i>Cancel
+                        </button>
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-clock-history me-1"></i>Reschedule
+                        </button>
+                    </div>
+                `;
+                container.appendChild(apptDiv);
+            });
+        }
+        
+        // Video player functionality
+        const videoModal = new bootstrap.Modal(document.getElementById('videoModal'));
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.video-thumbnail')) {
+                const videoUrl = e.target.closest('.video-thumbnail').getAttribute('data-video-url');
+                const videoPlayer = document.getElementById('videoPlayer');
+                videoPlayer.src = videoUrl;
+                videoModal.show();
             }
         });
         
-        // Form submission styling
-        const uploadForm = document.getElementById('uploadForm');
-        uploadForm.addEventListener('submit', function(e) {
-            // Add visual feedback
-            const submitBtn = uploadForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Uploading...';
-            submitBtn.disabled = true;
-            
-            // Reset after 3 seconds (in real app, this would be after actual upload)
-            setTimeout(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 3000);
+        // Request appointment button
+        document.getElementById('requestAppointmentBtn').addEventListener('click', function() {
+            alert('Appointment request feature coming soon!');
+        });
+        
+        // Check messages button
+        checkMessagesBtn.addEventListener('click', function() {
+            switchView('messages');
         });
     });
 </script>
