@@ -130,6 +130,101 @@
             padding-left: 1.5rem;
             padding-right: 1.5rem;
             padding-bottom: 3rem;
+            opacity: 0.3;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            position: relative;
+        }
+        
+        body.loaded {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* Overlay when patient ID is not entered */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 36, 82, 0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Patient ID Entry Modal */
+        .patient-id-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--nhs-aqua);
+            animation: modalAppear 0.6s ease-out;
+        }
+        
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .patient-id-modal h2 {
+            color: var(--nhs-dark-blue);
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+        
+        .patient-id-modal .form-control {
+            font-size: 1.2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 2px solid var(--nhs-mid-grey);
+            text-align: center;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: var(--nhs-dark-blue);
+        }
+        
+        .patient-id-modal .form-control:focus {
+            border-color: var(--nhs-aqua);
+            box-shadow: 0 0 0 0.25rem rgba(114, 207, 212, 0.5);
+        }
+        
+        .patient-id-modal .btn {
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+        
+        .patient-id-modal .btn-primary {
+            background: linear-gradient(135deg, var(--nhs-green), var(--nhs-light-green));
+            border: none;
+        }
+        
+        .patient-id-modal .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 150, 57, 0.4);
+        }
+        
+        .modal-icon {
+            font-size: 4rem;
+            color: var(--nhs-aqua);
+            margin-bottom: 1.5rem;
         }
 
         /* Dashboard Header */
@@ -374,11 +469,11 @@
             width: 20px;
             height: 20px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            cursor: pointer;
-            border: 2px solid white;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 0.7rem;
+                        cursor: pointer;
+                        border: 2px solid white;
         }
         
         /* Form Elements */
@@ -728,6 +823,10 @@
             .action-btn {
                 min-width: calc(50% - 0.25rem);
             }
+            
+            .patient-id-modal {
+                padding: 2rem;
+            }
         }
 
         @media (max-width: 768px) {
@@ -764,6 +863,11 @@
             .two-column-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .patient-id-modal {
+                padding: 1.5rem;
+                width: 95%;
+            }
         }
         
         @media (max-width: 576px) {
@@ -783,6 +887,40 @@
 </head>
 
 <body>
+
+<!-- Patient ID Entry Overlay (shown on page load) -->
+<div id="patientIdOverlay" class="overlay">
+    <div class="patient-id-modal">
+        <div class="modal-icon">
+            <i class="bi bi-person-badge"></i>
+        </div>
+        <h2>Welcome to Patient Portal</h2>
+        <p class="info-text mb-4">Please enter your Patient ID to access your medical evidence portal</p>
+        
+        <div class="mb-3">
+            <input type="text" class="form-control" id="initialPatientId" 
+                   placeholder="Enter Patient ID (e.g., P001, P002, P004)" 
+                   autocomplete="off" autofocus>
+            <div class="form-text mt-2">Your Patient ID was provided by your healthcare provider</div>
+        </div>
+        
+        <div class="d-flex gap-2 justify-content-center">
+            <button class="btn btn-nhs-secondary" onclick="window.location.reload()">
+                <i class="bi bi-x-circle me-2"></i>Cancel
+            </button>
+            <button class="btn btn-nhs-primary" id="submitPatientIdBtn">
+                <i class="bi bi-arrow-right-circle me-2"></i>Enter Portal
+            </button>
+        </div>
+        
+        <div class="mt-4">
+            <small class="text-muted">
+                <i class="bi bi-info-circle me-1"></i>
+                For demo purposes, try: P001, P002, or P004
+            </small>
+        </div>
+    </div>
+</div>
 
 <!-- Navigation Bar -->
 <nav class="navbar">
@@ -833,6 +971,9 @@
             <button class="btn btn-nhs-primary" id="checkMessagesBtn">
                 <i class="bi bi-chat-dots me-2"></i>Check Messages
             </button>
+            <button class="btn btn-nhs-secondary" id="changePatientBtn">
+                <i class="bi bi-arrow-left-right me-2"></i>Change Patient
+            </button>
         </div>
     </div>
     
@@ -870,7 +1011,7 @@
             <form id="uploadForm" class="mt-4">
                 <div class="mb-4">
                     <label class="form-label">Patient ID</label>
-                    <input id="patientId" class="form-control form-control-lg" placeholder="Enter your Patient ID (e.g., P004)" required>
+                    <input id="patientId" class="form-control form-control-lg" placeholder="Enter your Patient ID (e.g., P004)" required readonly>
                     <div class="form-text">This ID is provided by your healthcare provider</div>
                 </div>
 
@@ -1034,7 +1175,14 @@
         day: 'numeric' 
     });
 
+    // Global variable to store current patient ID
+    let currentPatientId = '';
+
     document.addEventListener('DOMContentLoaded', function() {
+        const patientIdOverlay = document.getElementById('patientIdOverlay');
+        const initialPatientIdInput = document.getElementById('initialPatientId');
+        const submitPatientIdBtn = document.getElementById('submitPatientIdBtn');
+        const changePatientBtn = document.getElementById('changePatientBtn');
         const patientIdInput = document.getElementById('patientId');
         const patientIdDisplay = document.getElementById('patientIdDisplay');
         const uploadArea = document.getElementById('uploadArea');
@@ -1054,6 +1202,80 @@
         const messagesPanel = document.getElementById('messagesPanel');
         const recordsPanel = document.getElementById('recordsPanel');
         const appointmentsPanel = document.getElementById('appointmentsPanel');
+        
+        // Show overlay on page load
+        document.body.style.opacity = '0.3';
+        document.body.style.pointerEvents = 'none';
+        patientIdOverlay.style.display = 'flex';
+        
+        // Submit Patient ID button click
+        submitPatientIdBtn.addEventListener('click', async function() {
+            const pid = initialPatientIdInput.value.trim();
+            
+            if (!pid) {
+                showAlert('Please enter a Patient ID', 'warning');
+                initialPatientIdInput.focus();
+                return;
+            }
+            
+            // Show loading state
+            submitPatientIdBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Verifying...';
+            submitPatientIdBtn.disabled = true;
+            
+            try {
+                // Call API to verify patient ID
+                const patientData = await verifyPatientId(pid);
+                
+                if (patientData) {
+                    // Store patient ID globally
+                    currentPatientId = pid;
+                    
+                    // Set the patient ID in the form
+                    patientIdInput.value = pid;
+                    patientIdDisplay.textContent = `Patient ID: ${pid}`;
+                    
+                    // Hide overlay and enable the page
+                    patientIdOverlay.style.display = 'none';
+                    document.body.classList.add('loaded');
+                    
+                    // Load patient data
+                    await loadPatientData(pid);
+                    
+                    // Load initial data
+                    await loadRecords();
+                    
+                    showAlert(`Welcome, ${patientData.name || 'Patient'}!`, 'success');
+                } else {
+                    showAlert('Invalid Patient ID. Please check and try again.', 'danger');
+                    submitPatientIdBtn.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>Enter Portal';
+                    submitPatientIdBtn.disabled = false;
+                }
+                
+            } catch (error) {
+                console.error('Error verifying patient ID:', error);
+                showAlert('Error connecting to server. Please try again.', 'danger');
+                submitPatientIdBtn.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>Enter Portal';
+                submitPatientIdBtn.disabled = false;
+            }
+        });
+        
+        // Enter key support in initial patient ID input
+        initialPatientIdInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                submitPatientIdBtn.click();
+            }
+        });
+        
+        // Change patient button
+        changePatientBtn.addEventListener('click', function() {
+            currentPatientId = '';
+            patientIdInput.value = '';
+            patientIdDisplay.textContent = 'Patient ID: Not entered';
+            document.body.classList.remove('loaded');
+            patientIdOverlay.style.display = 'flex';
+            initialPatientIdInput.value = '';
+            initialPatientIdInput.focus();
+        });
         
         // Update patient ID display
         patientIdInput.addEventListener('input', function() {
@@ -1226,6 +1448,26 @@
             }
         }
         
+        async function verifyPatientId(patientId) {
+            try {
+                const data = await apiGet(`/patient/${patientId}`);
+                return data;
+            } catch (error) {
+                console.error('Error verifying patient ID:', error);
+                
+                // For demo purposes, accept any ID starting with P
+                if (patientId && patientId.startsWith('P')) {
+                    return {
+                        name: 'Demo Patient',
+                        gpName: 'Dr. Demo',
+                        unreadMessages: 1
+                    };
+                }
+                
+                return null;
+            }
+        }
+        
         async function loadPatientData(patientId) {
             try {
                 const data = await apiGet(`/patient/${patientId}`);
@@ -1246,7 +1488,7 @@
         }
         
         async function loadMessages() {
-            const patientId = patientIdInput.value.trim();
+            const patientId = currentPatientId || patientIdInput.value.trim();
             if (!patientId) return;
             
             try {
@@ -1303,7 +1545,7 @@
         }
         
         async function loadAppointments() {
-            const patientId = patientIdInput.value.trim();
+            const patientId = currentPatientId || patientIdInput.value.trim();
             if (!patientId) return;
             
             try {
@@ -1382,6 +1624,32 @@
         checkMessagesBtn.addEventListener('click', function() {
             switchView('messages');
         });
+        
+        function showAlert(message, type = 'info') {
+            // Create alert element
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            alertDiv.style.top = '100px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '9999';
+            alertDiv.style.minWidth = '300px';
+            alertDiv.style.maxWidth = '500px';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+        
+        window.showAlert = showAlert;
     });
 </script>
 

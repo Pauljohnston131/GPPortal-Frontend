@@ -1,276 +1,3 @@
-// ============================================
-// PATIENT LOGIN & SESSION MANAGEMENT
-// ============================================
-
-// Create login overlay
-function createLoginOverlay() {
-    const overlay = document.createElement('div');
-    overlay.id = 'loginOverlay';
-    overlay.className = 'login-overlay';
-    overlay.innerHTML = `
-        <div class="login-container">
-            <div class="login-logo">
-                <div class="login-icon">
-                    <i class="bi bi-shield-check" style="font-size: 2rem; color: white;"></i>
-                </div>
-                <h3 class="mt-3" style="color: var(--nhs-dark-blue);">Patient Portal Login</h3>
-                <p class="info-text">Enter your Patient ID to access your medical records</p>
-            </div>
-            
-            <div class="mb-4">
-                <label class="form-label">Patient ID</label>
-                <input type="text" id="loginPatientId" class="form-control form-control-lg" 
-                       placeholder="e.g., P001, P002, P004" required autofocus>
-                <div class="form-text">Your unique patient identifier provided by your healthcare provider</div>
-            </div>
-            
-            <button id="loginBtn" class="btn btn-nhs-primary w-100 py-3">
-                <i class="bi bi-arrow-right-circle me-2"></i>Access Portal
-            </button>
-            
-            <div id="loginMessage" class="mt-3" style="min-height: 50px;"></div>
-            
-            <div class="mt-4 pt-3 border-top">
-                <p class="small text-muted">
-                    <i class="bi bi-info-circle me-1"></i>
-                    If you don't know your Patient ID, please contact your GP surgery
-                </p>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(overlay);
-    
-    // Add login event listener
-    document.getElementById('loginBtn').addEventListener('click', handleLogin);
-    document.getElementById('loginPatientId').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            handleLogin();
-        }
-    });
-    
-    // Add CSS for login overlay
-    const style = document.createElement('style');
-    style.textContent = `
-        .login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1a2452 0%, #2D3765 100%);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.5s ease;
-        }
-        
-        .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 3rem;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .login-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--nhs-aqua), #5bc0c5);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .login-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-// Handle login
-async function handleLogin() {
-    const loginPatientId = document.getElementById('loginPatientId').value.trim();
-    const loginBtn = document.getElementById('loginBtn');
-    const loginMessage = document.getElementById('loginMessage');
-    
-    if (!loginPatientId) {
-        showLoginMessage('Please enter your Patient ID', 'warning');
-        return;
-    }
-    
-    // Disable button and show loading state
-    loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Verifying...';
-    loginBtn.disabled = true;
-    
-    try {
-        // Use the mock function from api.js
-        const patientData = await getPatientInfo(loginPatientId);
-        
-        // For mock data, check if we got a valid response
-        if (!patientData || patientData.name === 'Unknown Patient') {
-            showLoginMessage('Invalid Patient ID. Please check and try again.', 'danger');
-        } else {
-            // Login successful - store patient ID in session
-            sessionStorage.setItem('patientId', loginPatientId);
-            sessionStorage.setItem('patientName', patientData.name || 'Patient');
-            sessionStorage.setItem('gpName', patientData.gpName || 'Dr. Smith');
-            
-            // Hide login overlay
-            document.getElementById('loginOverlay').classList.add('hidden');
-            
-            // Initialize portal with patient data
-            initializePortal(loginPatientId);
-            
-            // Show welcome message
-            setTimeout(() => {
-                showMessage(`Welcome back, ${patientData.name || 'Patient'}!`, 'success');
-            }, 500);
-        }
-    } catch (error) {
-        console.error('Login error:', error);
-        showLoginMessage('Unable to verify Patient ID. Please try again.', 'danger');
-    } finally {
-        // Reset button
-        loginBtn.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>Access Portal';
-        loginBtn.disabled = false;
-    }
-}
-
-function showLoginMessage(message, type) {
-    const loginMessage = document.getElementById('loginMessage');
-    loginMessage.innerHTML = `
-        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    `;
-}
-
-// Initialize portal after login
-function initializePortal(patientId) {
-    // Set patient ID in the main input
-    const patientIdInput = document.getElementById('patientId');
-    patientIdInput.value = patientId;
-    patientIdInput.disabled = true; // Disable editing after login
-    
-    // Update patient info display
-    const patientIdDisplay = document.getElementById('patientIdDisplay');
-    patientIdDisplay.textContent = `Patient ID: ${patientId}`;
-    patientIdDisplay.style.color = 'var(--nhs-dark-blue)';
-    
-    // Update patient name
-    const patientName = sessionStorage.getItem('patientName');
-    const gpName = sessionStorage.getItem('gpName');
-    document.getElementById('patientName').textContent = `Welcome, ${patientName}`;
-    document.getElementById('gpNameBadge').textContent = `GP: ${gpName}`;
-    
-    // Load initial data
-    loadRecords();
-    loadPatientData();
-    
-    // Remove logout button if it exists, then add it
-    const existingLogoutBtn = document.getElementById('logoutBtn');
-    if (existingLogoutBtn) {
-        existingLogoutBtn.remove();
-    }
-    
-    // Add logout button to navbar
-    addLogoutButton();
-}
-
-// Add logout button to navbar
-function addLogoutButton() {
-    const navbarContainer = document.querySelector('.navbar-container');
-    const logoutBtn = document.createElement('button');
-    logoutBtn.id = 'logoutBtn';
-    logoutBtn.className = 'btn btn-sm btn-outline-light ms-3';
-    logoutBtn.innerHTML = '<i class="bi bi-box-arrow-right me-1"></i>Logout';
-    logoutBtn.addEventListener('click', handleLogout);
-    
-    // Insert before patient info
-    const patientInfo = document.querySelector('.patient-info');
-    navbarContainer.insertBefore(logoutBtn, patientInfo);
-}
-
-// Handle logout
-function handleLogout() {
-    if (confirm('Are you sure you want to logout?')) {
-        // Clear session storage
-        sessionStorage.clear();
-        
-        // Reset form
-        const patientIdInput = document.getElementById('patientId');
-        patientIdInput.value = '';
-        patientIdInput.disabled = false;
-        
-        // Reset displays
-        document.getElementById('patientIdDisplay').textContent = 'Patient ID: Not entered';
-        document.getElementById('patientName').textContent = 'Welcome';
-        document.getElementById('gpNameBadge').textContent = 'GP: Dr. Smith';
-        
-        // Clear records and messages
-        document.getElementById('recordsList').innerHTML = `
-            <div class="empty-state">
-                <div class="empty-state-icon">
-                    <i class="bi bi-file-earmark-medical"></i>
-                </div>
-                <h5>No Patient ID entered</h5>
-                <p class="info-text">Enter your Patient ID to view your records</p>
-            </div>`;
-        
-        document.getElementById('recordCount').textContent = '0 records';
-        
-        // Remove logout button
-        const logoutBtn = document.getElementById('logoutBtn');
-        if (logoutBtn) {
-            logoutBtn.remove();
-        }
-        
-        // Show login overlay
-        const loginOverlay = document.getElementById('loginOverlay');
-        loginOverlay.classList.remove('hidden');
-        document.getElementById('loginPatientId').value = '';
-        document.getElementById('loginPatientId').focus();
-        
-        showMessage('You have been logged out successfully.', 'info');
-    }
-}
-
-// Check for existing session on page load
-function checkExistingSession() {
-    const patientId = sessionStorage.getItem('patientId');
-    if (patientId) {
-        // User is already logged in
-        initializePortal(patientId);
-        // Hide login overlay immediately
-        const loginOverlay = document.getElementById('loginOverlay');
-        if (loginOverlay) {
-            loginOverlay.classList.add('hidden');
-        }
-    } else {
-        // User needs to login
-        createLoginOverlay();
-    }
-}
-
-// ============================================
-// EXISTING PATIENT.JS CODE (MODIFIED)
-// ============================================
-
 const uploadForm = document.getElementById("uploadForm");
 const patientId = document.getElementById("patientId");
 const fileInput = document.getElementById("fileInput");
@@ -288,64 +15,33 @@ const messagesContainer = document.getElementById("messagesContainer");
 // View management
 let currentView = 'upload';
 
-// Modified: Check for session before allowing actions
-function requireLogin() {
-    if (!sessionStorage.getItem('patientId')) {
-        showMessage('Please login first', 'warning');
-        return false;
-    }
-    return true;
-}
+// Global patient ID
+let currentPatientId = '';
 
-// Modified Event Listeners
-uploadForm.addEventListener("submit", function(e) {
-    if (!requireLogin()) {
-        e.preventDefault();
-        return;
-    }
-    handleUpload(e);
-});
+// Event Listeners
+uploadForm.addEventListener("submit", handleUpload);
+refreshBtn.addEventListener("click", loadRecords);
 
-refreshBtn.addEventListener("click", function() {
-    if (!requireLogin()) return;
-    loadRecords();
-});
-
-// Modified: Load data only if logged in
-patientId.addEventListener("input", function() {
-    if (!requireLogin()) return;
-    loadRecords();
-    loadPatientData();
-});
-
-// Modified: Enter key support - check login first
+// Enter key support for patient ID
 patientId.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
-        if (!requireLogin()) return;
         loadRecords();
         loadPatientData();
     }
 });
 
-// Modified message functionality
+// Message functionality
 messageInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        if (!requireLogin()) return;
         sendMessage();
     }
 });
 
-sendMessageBtn.addEventListener('click', function() {
-    if (!requireLogin()) return;
-    sendMessage();
-});
+sendMessageBtn.addEventListener('click', sendMessage);
 
 // File input click through upload area
-document.getElementById('uploadArea').addEventListener('click', () => {
-    if (!requireLogin()) return;
-    fileInput.click();
-});
+document.getElementById('uploadArea').addEventListener('click', () => fileInput.click());
 
 // File selection handler
 fileInput.addEventListener('change', updateFileThumbnails);
@@ -364,8 +60,6 @@ uploadArea.addEventListener('dragleave', function() {
 uploadArea.addEventListener('drop', function(e) {
     e.preventDefault();
     uploadArea.classList.remove('dragover');
-    
-    if (!requireLogin()) return;
     
     if (e.dataTransfer.files.length) {
         fileInput.files = e.dataTransfer.files;
@@ -425,19 +119,19 @@ function updateFileThumbnails() {
 }
 
 // -------------------------------
-// Handle file upload (modified)
+// Handle file upload
 // -------------------------------
 async function handleUpload(e) {
     e.preventDefault();
     
-    const patientIdFromSession = sessionStorage.getItem('patientId');
-    if (!patientIdFromSession) {
-        showMessage("Please login first", "warning");
-        return;
-    }
-    
+    const pid = currentPatientId || patientId.value.trim();
     const note = uploadNote.value.trim();
     const files = fileInput.files;
+    
+    if (!pid) {
+        showMessage("Please enter Patient ID", "warning");
+        return;
+    }
     
     if (files.length === 0) {
         showMessage("Please select at least one file to upload", "warning");
@@ -471,7 +165,7 @@ async function handleUpload(e) {
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const fd = new FormData();
-            fd.append("patientId", patientIdFromSession);
+            fd.append("patientId", pid);
             fd.append("file", file);
             if (note) fd.append("note", note);
             
@@ -538,22 +232,19 @@ async function uploadFile(formData, current, total) {
 }
 
 // -------------------------------
-// Load patient data (modified)
+// Load patient data
 // -------------------------------
 async function loadPatientData() {
-    const patientIdFromSession = sessionStorage.getItem('patientId');
-    if (!patientIdFromSession) return;
+    const pid = currentPatientId || patientId.value.trim();
+    if (!pid) return;
     
     try {
-        // Use the mock function from api.js
-        const data = await getPatientInfo(patientIdFromSession);
+        const data = await apiGet(`/patient/${pid}`);
         if (data.name) {
             document.getElementById('patientName').textContent = `Welcome, ${data.name}`;
-            sessionStorage.setItem('patientName', data.name);
         }
         if (data.gpName) {
             document.getElementById('gpNameBadge').textContent = `GP: ${data.gpName}`;
-            sessionStorage.setItem('gpName', data.gpName);
         }
         
         // Update notification badges
@@ -579,14 +270,14 @@ async function loadPatientData() {
 }
 
 // -------------------------------
-// Send message to GP (modified)
+// Send message to GP
 // -------------------------------
 async function sendMessage() {
-    const patientIdFromSession = sessionStorage.getItem('patientId');
+    const pid = currentPatientId || patientId.value.trim();
     const content = messageInput.value.trim();
     
-    if (!patientIdFromSession) {
-        showMessage("Please login first", "warning");
+    if (!pid) {
+        showMessage("Please enter Patient ID first", "warning");
         return;
     }
     
@@ -596,8 +287,11 @@ async function sendMessage() {
     }
     
     try {
-        // Use the mock function from api.js
-        const response = await sendMessage(patientIdFromSession, content, 'patient');
+        const response = await apiPost('/messages', {
+            patientId: pid,
+            content: content,
+            sender: 'patient'
+        });
         
         if (response.success) {
             // Add message to UI immediately
@@ -625,20 +319,19 @@ async function sendMessage() {
 }
 
 // -------------------------------
-// Load messages (modified)
+// Load messages
 // -------------------------------
 async function loadMessages() {
-    const patientIdFromSession = sessionStorage.getItem('patientId');
-    if (!patientIdFromSession) return;
+    const pid = currentPatientId || patientId.value.trim();
+    if (!pid) return;
     
     try {
-        // Use the mock function from api.js
-        const data = await getMessages(patientIdFromSession);
+        const data = await apiGet(`/messages/${pid}`);
         displayMessages(data.messages || []);
         
-        // Mark messages as read using mock function
+        // Mark messages as read
         if (data.messages && data.messages.some(m => m.unread)) {
-            await markMessagesAsRead(patientIdFromSession);
+            await apiPost(`/messages/${pid}/read`, {});
             updateNotificationBadge();
         }
         
@@ -697,26 +390,26 @@ function addMessageToUI(msg) {
 }
 
 // -------------------------------
-// Load patient records (modified)
+// Load patient records
 // -------------------------------
 async function loadRecords() {
-    const patientIdFromSession = sessionStorage.getItem('patientId');
+    const pid = currentPatientId || patientId.value.trim();
     
-    if (!patientIdFromSession) {
+    if (!pid) {
         recordsList.innerHTML = `
             <div class="empty-state">
                 <div class="empty-state-icon">
                     <i class="bi bi-file-earmark-medical"></i>
                 </div>
-                <h5>Please login to view records</h5>
-                <p class="info-text">Enter your Patient ID in the login screen</p>
+                <h5>No Patient ID entered</h5>
+                <p class="info-text">Enter your Patient ID to view your records</p>
             </div>`;
         document.getElementById("recordCount").textContent = "0 records";
         return;
     }
     
     try {
-        const data = await apiGet(`/records?patientId=${patientIdFromSession}`);
+        const data = await apiGet(`/records?patientId=${pid}`);
         
         if (data.error) {
             showMessage(data.error, "warning");
@@ -945,12 +638,11 @@ function switchView(view) {
 }
 
 async function loadAppointments() {
-    const patientIdFromSession = sessionStorage.getItem('patientId');
-    if (!patientIdFromSession) return;
+    const pid = currentPatientId || patientId.value.trim();
+    if (!pid) return;
     
     try {
-        // Use the mock function from api.js
-        const data = await getAppointments(patientIdFromSession);
+        const data = await apiGet(`/appointments/${pid}`);
         displayAppointments(data.appointments || []);
     } catch (error) {
         console.error('Error loading appointments:', error);
@@ -1027,13 +719,13 @@ function displayAppointments(appointments) {
 }
 
 async function requestAppointment() {
-    const patientIdFromSession = sessionStorage.getItem('patientId');
-    if (!patientIdFromSession) {
-        showMessage("Please login first", "warning");
+    const pid = currentPatientId || patientId.value.trim();
+    if (!pid) {
+        showMessage("Please enter Patient ID first", "warning");
         return;
     }
     
-    // Use the mock function from api.js
+    // In a real implementation, this would open a form or modal
     showMessage("Appointment request feature coming soon!", "info");
 }
 
@@ -1041,8 +733,7 @@ async function cancelAppointment(appointmentId) {
     if (!confirm("Are you sure you want to cancel this appointment?")) return;
     
     try {
-        // Use the mock function from api.js
-        const response = await cancelAppointment(appointmentId);
+        const response = await apiPost(`/appointments/${appointmentId}/cancel`, {});
         if (response.success) {
             showMessage("Appointment cancelled successfully", "success");
             loadAppointments();
@@ -1058,12 +749,11 @@ async function rescheduleAppointment(appointmentId) {
 }
 
 async function updateNotificationBadge() {
-    const patientIdFromSession = sessionStorage.getItem('patientId');
-    if (!patientIdFromSession) return;
+    const pid = currentPatientId || patientId.value.trim();
+    if (!pid) return;
     
     try {
-        // Use the mock function from api.js
-        const data = await getPatientInfo(patientIdFromSession);
+        const data = await apiGet(`/patient/${pid}`);
         const unreadCount = data.unreadMessages || 0;
         document.getElementById('unreadBadge').textContent = unreadCount;
         document.getElementById('notificationCount').textContent = unreadCount;
@@ -1073,32 +763,31 @@ async function updateNotificationBadge() {
     }
 }
 
-// ============================================
-// INITIALIZATION
-// ============================================
+// Function to set patient ID (called from main HTML)
+function setPatientId(pid) {
+    currentPatientId = pid;
+    patientId.value = pid;
+    document.getElementById('patientIdDisplay').textContent = `Patient ID: ${pid}`;
+    document.getElementById('patientIdDisplay').style.color = 'var(--nhs-dark-blue)';
+}
 
-// Modified: Check for existing session on page load
+// Auto-load records if patient ID is pre-filled
 document.addEventListener('DOMContentLoaded', function() {
-    checkExistingSession();
+    if (currentPatientId || patientId.value.trim()) {
+        loadRecords();
+        loadPatientData();
+    }
     
-    // Initialize view switching - only if logged in
-    document.getElementById('btnUpload').addEventListener('click', () => {
-        if (!requireLogin()) return;
-        switchView('upload');
-    });
-    
-    document.getElementById('btnMessages').addEventListener('click', () => {
-        if (!requireLogin()) return;
-        switchView('messages');
-    });
-    
-    document.getElementById('btnRecords').addEventListener('click', () => {
-        if (!requireLogin()) return;
-        switchView('records');
-    });
-    
-    document.getElementById('btnAppointments').addEventListener('click', () => {
-        if (!requireLogin()) return;
-        switchView('appointments');
-    });
+    // Initialize view switching
+    document.getElementById('btnUpload').addEventListener('click', () => switchView('upload'));
+    document.getElementById('btnMessages').addEventListener('click', () => switchView('messages'));
+    document.getElementById('btnRecords').addEventListener('click', () => switchView('records'));
+    document.getElementById('btnAppointments').addEventListener('click', () => switchView('appointments'));
 });
+
+// Expose functions globally
+window.setPatientId = setPatientId;
+window.switchView = switchView;
+window.loadPatientData = loadPatientData;
+window.loadRecords = loadRecords;
+window.loadMessages = loadMessages;
