@@ -130,15 +130,12 @@
             padding-left: 1.5rem;
             padding-right: 1.5rem;
             padding-bottom: 3rem;
-            opacity: 0.3;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-            position: relative;
+            transition: filter 0.5s ease;
         }
         
-        body.loaded {
-            opacity: 1;
-            pointer-events: auto;
+        body.blurred {
+            filter: blur(5px);
+            overflow: hidden;
         }
         
         /* Overlay when patient ID is not entered */
@@ -469,11 +466,11 @@
             width: 20px;
             height: 20px;
             display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        font-size: 0.7rem;
-                        cursor: pointer;
-                        border: 2px solid white;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            cursor: pointer;
+            border: 2px solid white;
         }
         
         /* Form Elements */
@@ -1204,9 +1201,9 @@
         const appointmentsPanel = document.getElementById('appointmentsPanel');
         
         // Show overlay on page load
-        document.body.style.opacity = '0.3';
-        document.body.style.pointerEvents = 'none';
+        document.body.classList.add('blurred');
         patientIdOverlay.style.display = 'flex';
+        initialPatientIdInput.focus();
         
         // Submit Patient ID button click
         submitPatientIdBtn.addEventListener('click', async function() {
@@ -1236,7 +1233,7 @@
                     
                     // Hide overlay and enable the page
                     patientIdOverlay.style.display = 'none';
-                    document.body.classList.add('loaded');
+                    document.body.classList.remove('blurred');
                     
                     // Load patient data
                     await loadPatientData(pid);
@@ -1271,7 +1268,7 @@
             currentPatientId = '';
             patientIdInput.value = '';
             patientIdDisplay.textContent = 'Patient ID: Not entered';
-            document.body.classList.remove('loaded');
+            document.body.classList.add('blurred');
             patientIdOverlay.style.display = 'flex';
             initialPatientIdInput.value = '';
             initialPatientIdInput.focus();
