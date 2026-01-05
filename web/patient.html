@@ -211,6 +211,98 @@
             font-size: 1.25rem;
         }
 
+        /* NEW: Patient ID Entry Section - More Prominent */
+        .patient-id-entry {
+            background: linear-gradient(135deg, rgba(114, 207, 212, 0.15), rgba(45, 55, 101, 0.08));
+            border-radius: 20px;
+            padding: 2rem;
+            border: 2px solid rgba(114, 207, 212, 0.3);
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .patient-id-entry h3 {
+            color: var(--nhs-dark-blue);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .patient-id-entry .lead {
+            color: var(--nhs-grey);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .patient-id-input-group {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .patient-id-input {
+            flex: 1;
+            border-radius: 12px;
+            border: 2px solid rgba(114, 207, 212, 0.5);
+            padding: 0.75rem 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--nhs-dark-blue);
+            text-align: center;
+            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .patient-id-input:focus {
+            border-color: var(--nhs-aqua);
+            box-shadow: 0 0 0 0.25rem rgba(114, 207, 212, 0.25);
+            background: white;
+            outline: none;
+        }
+        
+        .patient-id-input::placeholder {
+            color: var(--nhs-mid-grey);
+            font-weight: normal;
+        }
+        
+        .patient-id-btn {
+            background: linear-gradient(135deg, var(--nhs-green), var(--nhs-light-green));
+            border: none;
+            color: white;
+            font-weight: 700;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        
+        .patient-id-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 150, 57, 0.25);
+        }
+        
+        .patient-id-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .patient-id-instructions {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--nhs-grey);
+        }
+        
+        .patient-id-instructions i {
+            color: var(--nhs-aqua);
+            margin-right: 0.5rem;
+        }
+
         /* Patient Info Bar - Updated */
         .patient-info-bar {
             background: linear-gradient(135deg, rgba(114, 207, 212, 0.1), rgba(45, 55, 101, 0.05));
@@ -221,8 +313,9 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
+            display: none; /* Hidden until patient ID is entered */
         }
-
+        
         .patient-id-display {
             font-weight: 700;
             color: var(--nhs-dark-blue);
@@ -456,6 +549,7 @@
             display: flex;
             gap: 0.5rem;
             margin-top: 1rem;
+            display: none; /* Hidden until patient ID is entered */
         }
         
         .action-btn {
@@ -728,12 +822,25 @@
             .action-btn {
                 min-width: calc(50% - 0.25rem);
             }
+            
+            .patient-id-input-group {
+                flex-direction: column;
+            }
+            
+            .patient-id-btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
 
         @media (max-width: 768px) {
             body {
                 padding: 5rem 1rem 2rem;
                 padding-top: 70px;
+            }
+            
+            .patient-id-entry {
+                padding: 1.5rem;
             }
             
             .patient-info-bar {
@@ -778,6 +885,10 @@
             .action-btn {
                 min-width: 100%;
             }
+            
+            .patient-id-entry h3 {
+                font-size: 1.25rem;
+            }
         }
     </style>
 </head>
@@ -820,11 +931,33 @@
         </button>
     </div>
 
-    <!-- Patient Info Bar -->
-    <div class="patient-info-bar glass-card">
+    <!-- NEW: Patient ID Entry Section -->
+    <div class="patient-id-entry glass-card" id="patientIdEntry">
+        <h3>Enter Your Patient ID</h3>
+        <p class="lead">Access your medical records, messages, and appointments</p>
+        
+        <div class="patient-id-input-group">
+            <input type="text" 
+                   id="patientIdInput" 
+                   class="patient-id-input" 
+                   placeholder="e.g., P004"
+                   maxlength="20">
+            <button class="patient-id-btn" id="patientIdSubmitBtn">
+                <i class="bi bi-arrow-right-circle me-2"></i>Access Portal
+            </button>
+        </div>
+        
+        <div class="patient-id-instructions mt-4">
+            <p><i class="bi bi-info-circle"></i>Your Patient ID was provided by your healthcare provider</p>
+            <p><i class="bi bi-shield-check"></i>Your information is secure and encrypted</p>
+        </div>
+    </div>
+
+    <!-- Patient Info Bar (Hidden until ID is entered) -->
+    <div class="patient-info-bar glass-card" id="patientInfoBar">
         <div>
             <div class="patient-id-display" id="patientIdDisplay">Patient ID: Not entered</div>
-            <div class="info-text">Enter your Patient ID to view and manage your uploads</div>
+            <div class="info-text">Welcome back! You can now access all portal features</div>
         </div>
         <div class="d-flex gap-2">
             <button class="btn btn-nhs-secondary" id="refreshBtn">
@@ -833,11 +966,14 @@
             <button class="btn btn-nhs-primary" id="checkMessagesBtn">
                 <i class="bi bi-chat-dots me-2"></i>Check Messages
             </button>
+            <button class="btn btn-nhs-secondary" id="changePatientBtn">
+                <i class="bi bi-person-plus me-2"></i>Change Patient
+            </button>
         </div>
     </div>
     
-    <!-- Communication Action Bar -->
-    <div class="communication-actions">
+    <!-- Communication Action Bar (Hidden until ID is entered) -->
+    <div class="communication-actions" id="communicationActions">
         <button class="action-btn active" id="btnUpload">
             <i class="bi bi-cloud-arrow-up"></i>
             Upload Evidence
@@ -868,12 +1004,8 @@
             <p class="info-text mb-4">Upload images, documents, or videos related to your symptoms or condition for your GP to review.</p>
 
             <form id="uploadForm" class="mt-4">
-                <div class="mb-4">
-                    <label class="form-label">Patient ID</label>
-                    <input id="patientId" class="form-control form-control-lg" placeholder="Enter your Patient ID (e.g., P004)" required>
-                    <div class="form-text">This ID is provided by your healthcare provider</div>
-                </div>
-
+                <!-- Patient ID field removed from here - it's now at the top -->
+                
                 <div class="mb-4">
                     <label class="form-label">Select File(s) to Upload</label>
                     <div class="upload-area" id="uploadArea">
@@ -1035,11 +1167,15 @@
     });
 
     document.addEventListener('DOMContentLoaded', function() {
-        const patientIdInput = document.getElementById('patientId');
+        const patientIdInput = document.getElementById('patientIdInput');
+        const patientIdSubmitBtn = document.getElementById('patientIdSubmitBtn');
+        const patientIdEntry = document.getElementById('patientIdEntry');
+        const patientInfoBar = document.getElementById('patientInfoBar');
         const patientIdDisplay = document.getElementById('patientIdDisplay');
+        const changePatientBtn = document.getElementById('changePatientBtn');
+        const communicationActions = document.getElementById('communicationActions');
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
-        const selectedFileName = document.getElementById('selectedFileName');
         const refreshBtn = document.getElementById('refreshBtn');
         const checkMessagesBtn = document.getElementById('checkMessagesBtn');
         const fileThumbnails = document.getElementById('fileThumbnails');
@@ -1055,21 +1191,153 @@
         const recordsPanel = document.getElementById('recordsPanel');
         const appointmentsPanel = document.getElementById('appointmentsPanel');
         
-        // Update patient ID display
-        patientIdInput.addEventListener('input', function() {
-            const pid = patientIdInput.value.trim();
-            if (pid) {
-                patientIdDisplay.textContent = `Patient ID: ${pid}`;
-                patientIdDisplay.style.color = 'var(--nhs-dark-blue)';
-                loadPatientData(pid);
-            } else {
-                patientIdDisplay.textContent = 'Patient ID: Not entered';
-                patientIdDisplay.style.color = 'var(--nhs-grey)';
+        // Store current patient ID
+        let currentPatientId = '';
+        
+        // Enter key support for patient ID input
+        patientIdInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                submitPatientId();
             }
         });
         
+        // Submit button click
+        patientIdSubmitBtn.addEventListener('click', submitPatientId);
+        
+        // Change patient button
+        changePatientBtn.addEventListener('click', function() {
+            // Reset to patient ID entry
+            patientInfoBar.style.display = 'none';
+            communicationActions.style.display = 'none';
+            patientIdEntry.style.display = 'block';
+            
+            // Clear patient ID
+            currentPatientId = '';
+            patientIdInput.value = '';
+            patientIdInput.focus();
+            
+            // Reset patient info
+            document.getElementById('patientName').textContent = 'Welcome';
+            document.getElementById('notificationCount').style.display = 'none';
+            
+            // Reset all panels
+            switchView('upload');
+            
+            // Clear any loaded data
+            document.getElementById('recordsList').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-file-earmark-medical"></i>
+                    </div>
+                    <h5>No records found</h5>
+                    <p class="info-text">Enter your Patient ID and upload files to see them here</p>
+                </div>`;
+                
+            document.getElementById('messagesContainer').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">
+                        <i class="bi bi-chat-left-text"></i>
+                    </div>
+                    <h5>No messages yet</h5>
+                    <p class="info-text">Your GP will message you here about your records</p>
+                </div>`;
+        });
+        
+        async function submitPatientId() {
+            const pid = patientIdInput.value.trim();
+            
+            if (!pid) {
+                showAlert('Please enter a Patient ID', 'warning');
+                return;
+            }
+            
+            // Show loading state
+            patientIdSubmitBtn.innerHTML = '<i class="bi bi-arrow-clockwise me-2"></i>Loading...';
+            patientIdSubmitBtn.disabled = true;
+            
+            try {
+                // Load patient data
+                await loadPatientData(pid);
+                
+                // Store current patient ID
+                currentPatientId = pid;
+                
+                // Update UI
+                patientIdDisplay.textContent = `Patient ID: ${pid}`;
+                patientIdEntry.style.display = 'none';
+                patientInfoBar.style.display = 'flex';
+                communicationActions.style.display = 'flex';
+                
+                // Switch to upload view
+                switchView('upload');
+                
+                // Load initial data
+                await loadRecords();
+                
+                showAlert(`Welcome back! Patient ID ${pid} loaded successfully.`, 'success');
+                
+            } catch (error) {
+                console.error('Error loading patient data:', error);
+                showAlert('Invalid Patient ID or unable to load patient data. Please try again.', 'danger');
+            } finally {
+                // Reset button state
+                patientIdSubmitBtn.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>Access Portal';
+                patientIdSubmitBtn.disabled = false;
+            }
+        }
+        
+        function showAlert(message, type) {
+            // Create alert element
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+            alertDiv.style.cssText = 'top: 100px; right: 20px; z-index: 1050; min-width: 300px;';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 5000);
+        }
+        
+        async function loadPatientData(patientId) {
+            try {
+                // Use the getPatientInfo function from api.js
+                const data = await getPatientInfo(patientId);
+                
+                if (data.name) {
+                    document.getElementById('patientName').textContent = `Welcome, ${data.name}`;
+                }
+                if (data.gpName) {
+                    document.getElementById('gpNameBadge').textContent = `GP: ${data.gpName}`;
+                }
+                if (data.unreadMessages > 0) {
+                    document.getElementById('unreadBadge').textContent = data.unreadMessages;
+                    document.getElementById('notificationCount').textContent = data.unreadMessages;
+                    document.getElementById('notificationCount').style.display = 'block';
+                } else {
+                    document.getElementById('notificationCount').style.display = 'none';
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('Error loading patient data:', error);
+                throw error;
+            }
+        }
+        
         // Enhanced file upload area interaction with multiple files
         uploadArea.addEventListener('click', function() {
+            if (!currentPatientId) {
+                showAlert('Please enter your Patient ID first', 'warning');
+                return;
+            }
             fileInput.click();
         });
         
@@ -1098,6 +1366,12 @@
         uploadArea.addEventListener('drop', function(e) {
             e.preventDefault();
             uploadArea.classList.remove('dragover');
+            
+            if (!currentPatientId) {
+                showAlert('Please enter your Patient ID first', 'warning');
+                resetUploadArea();
+                return;
+            }
             
             if (e.dataTransfer.files.length) {
                 fileInput.files = e.dataTransfer.files;
@@ -1174,18 +1448,34 @@
         
         // View switching functionality
         btnUpload.addEventListener('click', function() {
+            if (!currentPatientId) {
+                showAlert('Please enter your Patient ID first', 'warning');
+                return;
+            }
             switchView('upload');
         });
         
         btnMessages.addEventListener('click', function() {
+            if (!currentPatientId) {
+                showAlert('Please enter your Patient ID first', 'warning');
+                return;
+            }
             switchView('messages');
         });
         
         btnRecords.addEventListener('click', function() {
+            if (!currentPatientId) {
+                showAlert('Please enter your Patient ID first', 'warning');
+                return;
+            }
             switchView('records');
         });
         
         btnAppointments.addEventListener('click', function() {
+            if (!currentPatientId) {
+                showAlert('Please enter your Patient ID first', 'warning');
+                return;
+            }
             switchView('appointments');
         });
         
@@ -1226,31 +1516,11 @@
             }
         }
         
-        async function loadPatientData(patientId) {
-            try {
-                const data = await apiGet(`/patient/${patientId}`);
-                if (data.name) {
-                    document.getElementById('patientName').textContent = `Welcome, ${data.name}`;
-                }
-                if (data.gpName) {
-                    document.getElementById('gpNameBadge').textContent = `GP: ${data.gpName}`;
-                }
-                if (data.unreadMessages > 0) {
-                    document.getElementById('unreadBadge').textContent = data.unreadMessages;
-                    document.getElementById('notificationCount').textContent = data.unreadMessages;
-                    document.getElementById('notificationCount').style.display = 'block';
-                }
-            } catch (error) {
-                console.error('Error loading patient data:', error);
-            }
-        }
-        
         async function loadMessages() {
-            const patientId = patientIdInput.value.trim();
-            if (!patientId) return;
+            if (!currentPatientId) return;
             
             try {
-                const data = await apiGet(`/messages/${patientId}`);
+                const data = await getMessages(currentPatientId);
                 displayMessages(data.messages || []);
             } catch (error) {
                 console.error('Error loading messages:', error);
@@ -1303,11 +1573,10 @@
         }
         
         async function loadAppointments() {
-            const patientId = patientIdInput.value.trim();
-            if (!patientId) return;
+            if (!currentPatientId) return;
             
             try {
-                const data = await apiGet(`/appointments/${patientId}`);
+                const data = await getAppointments(currentPatientId);
                 displayAppointments(data.appointments || []);
             } catch (error) {
                 console.error('Error loading appointments:', error);
@@ -1382,6 +1651,116 @@
         checkMessagesBtn.addEventListener('click', function() {
             switchView('messages');
         });
+        
+        // Refresh button
+        refreshBtn.addEventListener('click', function() {
+            if (!currentPatientId) return;
+            loadRecords();
+            loadPatientData(currentPatientId);
+            showAlert('Data refreshed successfully', 'success');
+        });
+        
+        // Load records function
+        async function loadRecords() {
+            if (!currentPatientId) return;
+            
+            try {
+                const data = await getPatientRecords(currentPatientId);
+                const records = data.records || [];
+                
+                // Update record count
+                document.getElementById("recordCount").textContent = `${records.length} record${records.length !== 1 ? 's' : ''}`;
+                
+                if (records.length === 0) {
+                    document.getElementById('recordsList').innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="bi bi-cloud-upload"></i>
+                            </div>
+                            <h5>No records found</h5>
+                            <p class="info-text">Upload files to see them here</p>
+                            <button class="btn btn-nhs-primary mt-3" onclick="switchView('upload')">
+                                <i class="bi bi-cloud-arrow-up me-2"></i>Upload Your First File
+                            </button>
+                        </div>`;
+                    return;
+                }
+                
+                // Render records here (simplified for now)
+                document.getElementById('recordsList').innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        ${records.length} record${records.length !== 1 ? 's' : ''} found for Patient ID ${currentPatientId}
+                    </div>`;
+                
+            } catch (error) {
+                console.error('Error loading records:', error);
+            }
+        }
+        
+        // Form submission handler
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!currentPatientId) {
+                showAlert('Please enter your Patient ID first', 'warning');
+                return;
+            }
+            
+            const files = fileInput.files;
+            const note = document.getElementById('uploadNote').value.trim();
+            
+            if (files.length === 0) {
+                showAlert('Please select at least one file to upload', 'warning');
+                return;
+            }
+            
+            try {
+                const formData = new FormData();
+                formData.append('patientId', currentPatientId);
+                Array.from(files).forEach(file => {
+                    formData.append('files', file);
+                });
+                if (note) {
+                    formData.append('note', note);
+                }
+                
+                // Show progress
+                const progressBar = document.querySelector('.progress');
+                const bar = document.querySelector('.progress-bar');
+                progressBar.style.display = 'block';
+                bar.style.width = '0%';
+                
+                // Upload files
+                const response = await uploadMedicalEvidence(formData);
+                
+                // Update progress
+                bar.style.width = '100%';
+                
+                // Reset form
+                fileInput.value = '';
+                document.getElementById('uploadNote').value = '';
+                fileThumbnails.innerHTML = '';
+                
+                // Hide progress after delay
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                    bar.style.width = '0%';
+                }, 1000);
+                
+                showAlert('Files uploaded successfully!', 'success');
+                
+                // Refresh records
+                await loadRecords();
+                
+            } catch (error) {
+                console.error('Error uploading files:', error);
+                showAlert('Error uploading files. Please try again.', 'danger');
+            }
+        });
+        
+        // Auto-focus patient ID input on page load
+        patientIdInput.focus();
     });
 </script>
 
