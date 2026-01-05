@@ -15,12 +15,11 @@ const messagesContainer = document.getElementById("messagesContainer");
 // View management
 let currentView = 'upload';
 
-// Global patient ID
-let currentPatientId = '';
-
 // Event Listeners
 uploadForm.addEventListener("submit", handleUpload);
 refreshBtn.addEventListener("click", loadRecords);
+patientId.addEventListener("input", loadRecords);
+patientId.addEventListener("input", loadPatientData);
 
 // Enter key support for patient ID
 patientId.addEventListener('keypress', function(e) {
@@ -124,7 +123,7 @@ function updateFileThumbnails() {
 async function handleUpload(e) {
     e.preventDefault();
     
-    const pid = currentPatientId || patientId.value.trim();
+    const pid = patientId.value.trim();
     const note = uploadNote.value.trim();
     const files = fileInput.files;
     
@@ -235,7 +234,7 @@ async function uploadFile(formData, current, total) {
 // Load patient data
 // -------------------------------
 async function loadPatientData() {
-    const pid = currentPatientId || patientId.value.trim();
+    const pid = patientId.value.trim();
     if (!pid) return;
     
     try {
@@ -273,7 +272,7 @@ async function loadPatientData() {
 // Send message to GP
 // -------------------------------
 async function sendMessage() {
-    const pid = currentPatientId || patientId.value.trim();
+    const pid = patientId.value.trim();
     const content = messageInput.value.trim();
     
     if (!pid) {
@@ -322,7 +321,7 @@ async function sendMessage() {
 // Load messages
 // -------------------------------
 async function loadMessages() {
-    const pid = currentPatientId || patientId.value.trim();
+    const pid = patientId.value.trim();
     if (!pid) return;
     
     try {
@@ -393,7 +392,7 @@ function addMessageToUI(msg) {
 // Load patient records
 // -------------------------------
 async function loadRecords() {
-    const pid = currentPatientId || patientId.value.trim();
+    const pid = patientId.value.trim();
     
     if (!pid) {
         recordsList.innerHTML = `
@@ -638,7 +637,7 @@ function switchView(view) {
 }
 
 async function loadAppointments() {
-    const pid = currentPatientId || patientId.value.trim();
+    const pid = patientId.value.trim();
     if (!pid) return;
     
     try {
@@ -719,7 +718,7 @@ function displayAppointments(appointments) {
 }
 
 async function requestAppointment() {
-    const pid = currentPatientId || patientId.value.trim();
+    const pid = patientId.value.trim();
     if (!pid) {
         showMessage("Please enter Patient ID first", "warning");
         return;
@@ -749,7 +748,7 @@ async function rescheduleAppointment(appointmentId) {
 }
 
 async function updateNotificationBadge() {
-    const pid = currentPatientId || patientId.value.trim();
+    const pid = patientId.value.trim();
     if (!pid) return;
     
     try {
@@ -763,17 +762,9 @@ async function updateNotificationBadge() {
     }
 }
 
-// Function to set patient ID (called from main HTML)
-function setPatientId(pid) {
-    currentPatientId = pid;
-    patientId.value = pid;
-    document.getElementById('patientIdDisplay').textContent = `Patient ID: ${pid}`;
-    document.getElementById('patientIdDisplay').style.color = 'var(--nhs-dark-blue)';
-}
-
 // Auto-load records if patient ID is pre-filled
 document.addEventListener('DOMContentLoaded', function() {
-    if (currentPatientId || patientId.value.trim()) {
+    if (patientId.value.trim()) {
         loadRecords();
         loadPatientData();
     }
@@ -783,11 +774,4 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btnMessages').addEventListener('click', () => switchView('messages'));
     document.getElementById('btnRecords').addEventListener('click', () => switchView('records'));
     document.getElementById('btnAppointments').addEventListener('click', () => switchView('appointments'));
-});
-
-// Expose functions globally
-window.setPatientId = setPatientId;
-window.switchView = switchView;
-window.loadPatientData = loadPatientData;
-window.loadRecords = loadRecords;
-window.loadMessages = loadMessages;
+})
