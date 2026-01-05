@@ -20,7 +20,7 @@ function createLoginOverlay() {
             <div class="mb-4">
                 <label class="form-label">Patient ID</label>
                 <input type="text" id="loginPatientId" class="form-control form-control-lg" 
-                       placeholder="e.g., P001, P002" required autofocus>
+                       placeholder="e.g., P001, P002, P004" required autofocus>
                 <div class="form-text">Your unique patient identifier provided by your healthcare provider</div>
             </div>
             
@@ -117,11 +117,12 @@ async function handleLogin() {
     loginBtn.disabled = true;
     
     try {
-        // Call API to verify patient ID
-        const patientData = await apiGet(`/patient/${loginPatientId}`);
+        // Use the mock function from api.js
+        const patientData = await getPatientInfo(loginPatientId);
         
-        if (patientData.error) {
-            showLoginMessage(patientData.error, 'danger');
+        // For mock data, check if we got a valid response
+        if (!patientData || patientData.name === 'Unknown Patient') {
+            showLoginMessage('Invalid Patient ID. Please check and try again.', 'danger');
         } else {
             // Login successful - store patient ID in session
             sessionStorage.setItem('patientId', loginPatientId);
@@ -544,7 +545,8 @@ async function loadPatientData() {
     if (!patientIdFromSession) return;
     
     try {
-        const data = await apiGet(`/patient/${patientIdFromSession}`);
+        // Use the mock function from api.js
+        const data = await getPatientInfo(patientIdFromSession);
         if (data.name) {
             document.getElementById('patientName').textContent = `Welcome, ${data.name}`;
             sessionStorage.setItem('patientName', data.name);
@@ -594,11 +596,8 @@ async function sendMessage() {
     }
     
     try {
-        const response = await apiPost('/messages', {
-            patientId: patientIdFromSession,
-            content: content,
-            sender: 'patient'
-        });
+        // Use the mock function from api.js
+        const response = await sendMessage(patientIdFromSession, content, 'patient');
         
         if (response.success) {
             // Add message to UI immediately
@@ -633,12 +632,13 @@ async function loadMessages() {
     if (!patientIdFromSession) return;
     
     try {
-        const data = await apiGet(`/messages/${patientIdFromSession}`);
+        // Use the mock function from api.js
+        const data = await getMessages(patientIdFromSession);
         displayMessages(data.messages || []);
         
-        // Mark messages as read
+        // Mark messages as read using mock function
         if (data.messages && data.messages.some(m => m.unread)) {
-            await apiPost(`/messages/${patientIdFromSession}/read`, {});
+            await markMessagesAsRead(patientIdFromSession);
             updateNotificationBadge();
         }
         
@@ -949,7 +949,8 @@ async function loadAppointments() {
     if (!patientIdFromSession) return;
     
     try {
-        const data = await apiGet(`/appointments/${patientIdFromSession}`);
+        // Use the mock function from api.js
+        const data = await getAppointments(patientIdFromSession);
         displayAppointments(data.appointments || []);
     } catch (error) {
         console.error('Error loading appointments:', error);
@@ -1032,7 +1033,7 @@ async function requestAppointment() {
         return;
     }
     
-    // In a real implementation, this would open a form or modal
+    // Use the mock function from api.js
     showMessage("Appointment request feature coming soon!", "info");
 }
 
@@ -1040,7 +1041,8 @@ async function cancelAppointment(appointmentId) {
     if (!confirm("Are you sure you want to cancel this appointment?")) return;
     
     try {
-        const response = await apiPost(`/appointments/${appointmentId}/cancel`, {});
+        // Use the mock function from api.js
+        const response = await cancelAppointment(appointmentId);
         if (response.success) {
             showMessage("Appointment cancelled successfully", "success");
             loadAppointments();
@@ -1060,7 +1062,8 @@ async function updateNotificationBadge() {
     if (!patientIdFromSession) return;
     
     try {
-        const data = await apiGet(`/patient/${patientIdFromSession}`);
+        // Use the mock function from api.js
+        const data = await getPatientInfo(patientIdFromSession);
         const unreadCount = data.unreadMessages || 0;
         document.getElementById('unreadBadge').textContent = unreadCount;
         document.getElementById('notificationCount').textContent = unreadCount;
