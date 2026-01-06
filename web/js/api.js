@@ -1,11 +1,11 @@
-// api.js - Real implementation for Azure backend
+// api.js - Match your actual Flask backend endpoints
 const API_BASE = window.location.hostname.includes("azurewebsites.net")
   ? "https://gpportal-api-hmd0bjameudkarc5.uksouth-01.azurewebsites.net"
   : "http://127.0.0.1:8000";
 
 console.log('API Base URL:', API_BASE);
 
-// Reusable API helpers with proper error handling
+// Reusable API helpers
 async function apiGet(path) {
     try {
         console.log(`GET: ${API_BASE}${path}`);
@@ -24,7 +24,7 @@ async function apiGet(path) {
 
 async function apiPost(path, body) {
     try {
-        console.log(`POST: ${API_BASE}${path}`, body);
+        console.log(`POST: ${API_BASE}${path}`);
         const response = await fetch(`${API_BASE}${path}`, {
             method: "POST",
             body
@@ -54,8 +54,7 @@ async function apiPostJSON(path, jsonData) {
         });
         
         if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`HTTP error! status: ${response.status}, response: ${errorText}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         
         return await response.json();
@@ -144,83 +143,113 @@ async function apiUploadFile(path, formData, onProgress = null) {
         };
         
         xhr.open('POST', `${API_BASE}${path}`);
-        
-        // Don't set Content-Type header for FormData - let browser set it
-        xhr.timeout = 300000; // 5 minute timeout for large files
-        
+        xhr.timeout = 300000; // 5 minute timeout
         xhr.send(formData);
     });
 }
 
-// Specific endpoint functions for patient portal
+// SPECIFIC ENDPOINTS - MATCHING YOUR FLASK APP.PY
+// ----------------------------------------------------------
+// 1. Check if patient exists - use /records endpoint
 async function getPatientInfo(patientId) {
     if (!patientId || patientId.trim() === '') {
         throw new Error('Patient ID is required');
     }
-    return apiGet(`/api/patient/${patientId}`);
+    
+    try {
+        // Use the /records endpoint to check if patient exists
+        const response = await apiGet(`/records?patientId=${patientId}`);
+        
+        // If successful, patient exists (even if no records yet)
+        return {
+            name: `Patient ${patientId}`,
+            gpName: 'Your GP',
+            unreadMessages: 0,
+            recordsCount: response.count || 0
+        };
+    } catch (error) {
+        // If 404, patient doesn't exist or no records
+        throw new Error('Patient not found or no records exist');
+    }
 }
 
+// 2. Get patient records - EXACTLY MATCHES YOUR FLASK ENDPOINT
 async function getPatientRecords(patientId) {
     if (!patientId || patientId.trim() === '') {
         throw new Error('Patient ID is required');
     }
-    return apiGet(`/api/patient/${patientId}/records`);
+    return apiGet(`/records?patientId=${patientId}`);
 }
 
+// 3. Upload medical evidence - EXACTLY MATCHES YOUR FLASK ENDPOINT
 async function uploadMedicalEvidence(formData, onProgress = null) {
-    return apiUploadFile('/api/upload', formData, onProgress);
+    return apiUploadFile('/upload', formData, onProgress);
 }
 
+// 4. Get single record - MATCHES YOUR FLASK ENDPOINT
+async function getRecord(recordId) {
+    return apiGet(`/record/${recordId}`);
+}
+
+// 5. Update record (GP notes, status) - MATCHES YOUR FLASK ENDPOINT
+async function updateRecord(recordId, updates) {
+    return apiPut(`/record/${recordId}`, updates);
+}
+
+// 6. Delete record - MATCHES YOUR FLASK ENDPOINT
+async function deleteRecord(recordId) {
+    return apiDelete(`/record/${recordId}`);
+}
+
+// 7. Search patients - MATCHES YOUR FLASK ENDPOINT
+async function searchPatients(query) {
+    return apiGet(`/search/patients?query=${query}`);
+}
+
+// 8. Health check - MATCHES YOUR FLASK ENDPOINT
+async function checkHealth() {
+    return apiGet('/health');
+}
+
+// 9. Media URL - MATCHES YOUR FLASK ENDPOINT
+function getMediaUrl(blobPath) {
+    return `${API_BASE}/media/${blobPath}`;
+}
+
+// TEMPORARY MOCK FUNCTIONS - Remove these when you implement these features
+// Your Flask app doesn't have these endpoints yet
 async function getMessages(patientId) {
-    if (!patientId || patientId.trim() === '') {
-        throw new Error('Patient ID is required');
-    }
-    return apiGet(`/api/patient/${patientId}/messages`);
+    console.log(`[MOCK] Getting messages for ${patientId}`);
+    // Mock until you implement messages in backend
+    return {
+        messages: []
+    };
 }
 
 async function sendMessage(patientId, content, sender = 'patient') {
-    if (!patientId || patientId.trim() === '') {
-        throw new Error('Patient ID is required');
-    }
-    if (!content || content.trim() === '') {
-        throw new Error('Message content is required');
-    }
-    return apiPostJSON('/api/messages', {
-        patientId,
-        content,
-        sender
-    });
-}
-
-async function markMessagesAsRead(patientId) {
-    if (!patientId || patientId.trim() === '') {
-        throw new Error('Patient ID is required');
-    }
-    return apiPut(`/api/patient/${patientId}/messages/read`, {});
+    console.log(`[MOCK] Sending message for ${patientId}`);
+    // Mock until you implement messages in backend
+    return { success: true };
 }
 
 async function getAppointments(patientId) {
-    if (!patientId || patientId.trim() === '') {
-        throw new Error('Patient ID is required');
-    }
-    return apiGet(`/api/patient/${patientId}/appointments`);
+    console.log(`[MOCK] Getting appointments for ${patientId}`);
+    // Mock until you implement appointments in backend
+    return {
+        appointments: []
+    };
 }
 
 async function cancelAppointment(appointmentId) {
-    if (!appointmentId) {
-        throw new Error('Appointment ID is required');
-    }
-    return apiDelete(`/api/appointments/${appointmentId}`);
+    console.log(`[MOCK] Cancelling appointment ${appointmentId}`);
+    // Mock until you implement appointments in backend
+    return { success: true };
 }
 
 async function requestAppointment(patientId, appointmentData) {
-    if (!patientId || patientId.trim() === '') {
-        throw new Error('Patient ID is required');
-    }
-    return apiPostJSON('/api/appointments', {
-        patientId,
-        ...appointmentData
-    });
+    console.log(`[MOCK] Requesting appointment for ${patientId}`);
+    // Mock until you implement appointments in backend
+    return { success: true };
 }
 
 // Expose all functions globally
@@ -230,14 +259,23 @@ window.apiPut = apiPut;
 window.apiDelete = apiDelete;
 window.apiPostJSON = apiPostJSON;
 window.apiUploadFile = apiUploadFile;
-window.uploadMedicalEvidence = uploadMedicalEvidence;
+
+// Core functions that match your Flask endpoints
 window.getPatientInfo = getPatientInfo;
 window.getPatientRecords = getPatientRecords;
+window.uploadMedicalEvidence = uploadMedicalEvidence;
+window.getRecord = getRecord;
+window.updateRecord = updateRecord;
+window.deleteRecord = deleteRecord;
+window.searchPatients = searchPatients;
+window.checkHealth = checkHealth;
+window.getMediaUrl = getMediaUrl;
+
+// Mock functions (temporary - remove when backend implements these)
 window.getMessages = getMessages;
 window.sendMessage = sendMessage;
-window.markMessagesAsRead = markMessagesAsRead;
 window.getAppointments = getAppointments;
 window.cancelAppointment = cancelAppointment;
 window.requestAppointment = requestAppointment;
 
-console.log('API functions loaded');
+console.log('API functions loaded - Matched to Flask endpoints');
