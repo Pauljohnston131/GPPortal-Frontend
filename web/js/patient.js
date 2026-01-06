@@ -1,8 +1,3 @@
-// patient.js - Real implementation
-// Constants
-const API_BASE = window.location.hostname.includes("azurewebsites.net")
-    ? "https://gpportal-api-hmd0bjameudkarc5.uksouth-01.azurewebsites.net"
-    : "http://127.0.0.1:8000";
 
 // Set current date on page load
 document.addEventListener('DOMContentLoaded', function() {
