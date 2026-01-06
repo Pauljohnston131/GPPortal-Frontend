@@ -490,7 +490,7 @@ function initPatientPortal() {
                 progressBarElement.style.display = 'none';
             }
             
-            if (response.success) {
+            if (response.message === "uploaded"){
                 showMessage(`${files.length} file(s) uploaded successfully!`, "success");
                 
                 // Reset form
